@@ -1,3 +1,6 @@
+# LeanTime
+![status](https://github.com/seymourpoler/LeanTime/actions/workflows/ci.yml/badge.svg)
+
 It is a very simple count down timer.
 
 We use: `vite` and `vitest`.
