@@ -1,68 +1,80 @@
 import express from 'express';
-import http from 'http';
+import { createServer as createHttpServer } from 'http';
 import { Server } from 'socket.io';
-import cors from 'cors';
+import { createServer as createViteServer } from 'vite';
+import path from 'path';
 
-const app = express();
-app.use(cors());
+async function bootstrap() {
+    let defaultNumberOfSeconds = 1500;
+    let numberOfSeconds = defaultNumberOfSeconds;
+    let timerInterval: NodeJS.Timeout | undefined = undefined;
 
-let defaultNumberOfSeconds = 1500;
-let numberOfSeconds = defaultNumberOfSeconds;
-let timerInterval: NodeJS.Timeout | undefined = undefined;
+    const app = express();
+    const httpServer = createHttpServer(app);
+    const io = new Server(httpServer);
 
-const server = http.createServer(app);
-const io = new Server(server, {
-    cors: {
-        origin: "http://localhost:5173",
-        methods: ["GET", "POST"],
-    }
-});
+    io.on("connection", (socket) => {
+        console.log(`User connected: ${socket.id}`);
 
-io.on("connection", (socket) => {
-    console.log(`User connected: ${socket.id}`);
+        socket.on('start', (sender) => {
+            console.log(`User started: ${sender}`);
 
-    socket.on('start', (sender) =>{
-        console.log(`User started: ${sender}`);
+            if (timerInterval) {
+                console.log("Timer already running, ignoring start request");
+                return;
+            }
 
-        if (timerInterval) {
-            console.log("Timer already running, ignoring start request");
-            return;
-        }
+            timerInterval = setInterval(() => {
+                numberOfSeconds--;
+                io.emit("updated_time", numberOfSeconds);
+            }, 1000);
+        });
 
-        timerInterval = setInterval(() => {
-            numberOfSeconds--;
+        socket.on("pause", () => {
+            console.log(`User pause: ${socket.id}`);
+            if (timerInterval) {
+                clearInterval(timerInterval);
+                timerInterval = undefined;
+                console.log("Timer paused successfully");
+            }
+        });
+
+        socket.on('reset', () => {
+            console.log(`User reset: ${socket.id}`);
+            if (timerInterval) {
+                clearInterval(timerInterval);
+                timerInterval = undefined;
+            }
+            numberOfSeconds = defaultNumberOfSeconds;
             io.emit("updated_time", numberOfSeconds);
-        }, 1000);
+        });
+
+        socket.on('apply', (time: number) => {
+            console.log(`User apply: ${socket.id}`);
+            console.log("time:", time);
+            numberOfSeconds = time;
+            defaultNumberOfSeconds = time;
+            io.emit("updated_time", numberOfSeconds);
+        });
     });
 
-    socket.on("pause", () => {
-        console.log(`User pause: ${socket.id}`);
-        if (timerInterval) {
-            clearInterval(timerInterval);
-            timerInterval = undefined;
-            console.log("Timer paused successfully");
-        }
-    });
+    if (process.env.NODE_ENV !== 'production') {
+        // In Dev: Vite handles the frontend requests as middleware
+        const vite = await createViteServer({
+            server: { middlewareMode: true },
+            appType: 'spa'
+        });
+        app.use(vite.middlewares);
+    } else {
+        // In Prod: Serve the built files
+        const distPath = path.resolve(process.cwd(), 'dist');
+        app.use(express.static(distPath));
+    }
 
-    socket.on('reset', () => {
-        console.log(`User reset: ${socket.id}`);
-        if (timerInterval) {
-            clearInterval(timerInterval);
-            timerInterval = undefined;
-        }
-        numberOfSeconds = defaultNumberOfSeconds;
-        io.emit("updated_time", numberOfSeconds);
+    const PORT = 3000;
+    httpServer.listen(PORT, () => {
+        console.log(`🚀 Unified server running at http://localhost:${PORT}`);
     });
+}
 
-    socket.on('apply', (time: number) => {
-        console.log(`User apply: ${socket.id}`);
-        console.log("time:", time);
-        numberOfSeconds = time;
-        defaultNumberOfSeconds = time;
-        io.emit("updated_time", numberOfSeconds);
-    });
-});
-
-server.listen(3001, () => {
-    console.log("Server running on port 3001");
-});
+bootstrap();
