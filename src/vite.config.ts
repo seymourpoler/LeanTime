@@ -1,14 +1,14 @@
 import { defineConfig } from 'vite';
 
 export default defineConfig({
-    root: './', // Root is now the project folder
+    root: './',
     build: {
         outDir: 'dist',
     },
     server: {
         proxy: {
             '/socket.io': {
-                target: 'http://localhost:3000', // Point to your server port
+                target: 'http://localhost:3000',
                 ws: true
             }
         }
