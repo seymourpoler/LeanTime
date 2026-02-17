@@ -3,68 +3,36 @@ import { createServer as createHttpServer } from 'http';
 import { Server } from 'socket.io';
 import { createServer as createViteServer } from 'vite';
 import path from 'path';
+import {DateTimeService} from "./dateTimeService";
 
 async function bootstrap() {
-    let defaultNumberOfSeconds = 1500;
-    let numberOfSeconds = defaultNumberOfSeconds;
-    let timerInterval: NodeJS.Timeout | undefined = undefined;
-
     const app = express();
     const httpServer = createHttpServer(app);
     const io = new Server(httpServer);
+    const dateTimeService = new DateTimeService(io);
 
     io.on("connection", (socket) => {
         console.log(`User connected: ${socket.id}`);
 
         socket.on('start', (sender) => {
             console.log(`User started: ${sender}`);
-
-            if(numberOfSeconds < 1){
-                console.log("The time is up, ignoring start request");
-                if (timerInterval) {
-                    clearInterval(timerInterval);
-                    timerInterval = undefined;
-                    console.log("Timer paused successfully");
-                }
-                return;
-            }
-
-            if (timerInterval) {
-                console.log("Timer already running, ignoring start request");
-                return;
-            }
-
-            timerInterval = setInterval(() => {
-                numberOfSeconds--;
-                io.emit("updated_time", numberOfSeconds);
-            }, 1000);
+            dateTimeService.start();
         });
 
         socket.on("pause", () => {
             console.log(`User pause: ${socket.id}`);
-            if (timerInterval) {
-                clearInterval(timerInterval);
-                timerInterval = undefined;
-                console.log("Timer paused successfully");
-            }
+            dateTimeService.pause();
         });
 
         socket.on('reset', () => {
             console.log(`User reset: ${socket.id}`);
-            if (timerInterval) {
-                clearInterval(timerInterval);
-                timerInterval = undefined;
-            }
-            numberOfSeconds = defaultNumberOfSeconds;
-            io.emit("updated_time", numberOfSeconds);
+            dateTimeService.reset()
         });
 
         socket.on('apply', (time: number) => {
             console.log(`User apply: ${socket.id}`);
             console.log("time:", time);
-            numberOfSeconds = time;
-            defaultNumberOfSeconds = time;
-            io.emit("updated_time", numberOfSeconds);
+            dateTimeService.updateSeconds(time);
         });
     });
 
