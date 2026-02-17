@@ -38,9 +38,7 @@ export class TimerService {
 
     public updateSeconds(value: number): void {
         this.seconds = value;
-    }
-
-    public updateDefaultSeconds(value: number): void {
         this.defaultSeconds = value;
+        this.io.emit("updated_time", this.seconds);
     }
 }

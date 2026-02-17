@@ -32,9 +32,7 @@ async function bootstrap() {
         socket.on('apply', (time: number) => {
             console.log(`User apply: ${socket.id}`);
             console.log("time:", time);
-            timerService.updateDefaultSeconds(time);
             timerService.updateSeconds(time);
-            io.emit("updated_time", timerService.seconds);
         });
     });
 
