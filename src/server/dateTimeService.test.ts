@@ -24,7 +24,6 @@ describe('date time service', () => {
         dateTimeService.seconds = 10;
         dateTimeService.start();
 
-        // Fast-forward 1 second
         vi.advanceTimersByTime(1000);
 
         expect(dateTimeService.seconds).toBe(9);
@@ -33,20 +32,19 @@ describe('date time service', () => {
 
     it('should not allow multiple intervals to run simultaneously', () => {
         dateTimeService.start();
-        dateTimeService.start(); // Second call
+        dateTimeService.start();
 
         vi.advanceTimersByTime(1000);
 
-        // If two intervals were running, it would be 1498
         expect(dateTimeService.seconds).toBe(1499);
     });
 
     it('should stop decrementing when paused', () => {
         dateTimeService.start();
-        vi.advanceTimersByTime(1000); // 1499
+        vi.advanceTimersByTime(1000);
 
         dateTimeService.pause();
-        vi.advanceTimersByTime(2000); // Should stay at 1499
+        vi.advanceTimersByTime(2000);
 
         expect(dateTimeService.seconds).toBe(1499);
     });
@@ -55,11 +53,9 @@ describe('date time service', () => {
         dateTimeService.seconds = 1;
         dateTimeService.start();
 
-        vi.advanceTimersByTime(1000); // Hits 0
-
+        vi.advanceTimersByTime(1000);
         expect(dateTimeService.seconds).toBe(0);
 
-        // Advance more time to ensure it's actually paused
         vi.advanceTimersByTime(1000);
         expect(dateTimeService.seconds).toBe(0);
     });
@@ -72,8 +68,9 @@ describe('date time service', () => {
         expect(server.emit).toHaveBeenCalledWith("updated_time", 1500);
     });
 
-    it('should update both current and default seconds via updateSeconds', () => {
+    it('should update both current and default seconds', () => {
         const newTime = 3000;
+
         dateTimeService.updateSeconds(newTime);
 
         expect(dateTimeService.seconds).toBe(newTime);
