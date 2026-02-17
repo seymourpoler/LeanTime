@@ -19,6 +19,16 @@ async function bootstrap() {
         socket.on('start', (sender) => {
             console.log(`User started: ${sender}`);
 
+            if(numberOfSeconds < 1){
+                console.log("The time is up, ignoring start request");
+                if (timerInterval) {
+                    clearInterval(timerInterval);
+                    timerInterval = undefined;
+                    console.log("Timer paused successfully");
+                }
+                return;
+            }
+
             if (timerInterval) {
                 console.log("Timer already running, ignoring start request");
                 return;
