@@ -11,3 +11,5 @@ To run the application.
 - In the server folder run `npm run dev`
 
 To the test, in the client folder run `npm run test`
+
+It is deployed in [Rail Way](https://leantime-production-d603.up.railway.app/)
