@@ -6,9 +6,6 @@ import path from 'path';
 import {TimerService} from "./dateTimeService";
 
 async function bootstrap() {
-    let defaultNumberOfSeconds = 1500;
-    let numberOfSeconds = defaultNumberOfSeconds;
-
     const app = express();
     const httpServer = createHttpServer(app);
     const io = new Server(httpServer);
