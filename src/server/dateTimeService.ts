@@ -1,6 +1,6 @@
 import {Server} from "socket.io";
 
-export class TimerService {
+export class DateTimeService {
     private interval?: NodeJS.Timeout;
 
     public seconds: number = 1500;
