@@ -3,36 +3,36 @@ import { createServer as createHttpServer } from 'http';
 import { Server } from 'socket.io';
 import { createServer as createViteServer } from 'vite';
 import path from 'path';
-import {TimerService} from "./dateTimeService";
+import {DateTimeService} from "./dateTimeService";
 
 async function bootstrap() {
     const app = express();
     const httpServer = createHttpServer(app);
     const io = new Server(httpServer);
-    const timerService = new TimerService(io);
+    const dateTimeService = new DateTimeService(io);
 
     io.on("connection", (socket) => {
         console.log(`User connected: ${socket.id}`);
 
         socket.on('start', (sender) => {
             console.log(`User started: ${sender}`);
-            timerService.start();
+            dateTimeService.start();
         });
 
         socket.on("pause", () => {
             console.log(`User pause: ${socket.id}`);
-            timerService.pause();
+            dateTimeService.pause();
         });
 
         socket.on('reset', () => {
             console.log(`User reset: ${socket.id}`);
-            timerService.reset()
+            dateTimeService.reset()
         });
 
         socket.on('apply', (time: number) => {
             console.log(`User apply: ${socket.id}`);
             console.log("time:", time);
-            timerService.updateSeconds(time);
+            dateTimeService.updateSeconds(time);
         });
     });
 
