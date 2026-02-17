@@ -4,6 +4,7 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
+  "type": "module",
   "repository": {
     "type": "git",
     "url": "https://github.com/seymourpoler/LeanTime.git"
@@ -11,25 +12,23 @@
   "author": "seymourpoler at gmail dot com",
   "license": "GPL v3",
   "scripts": {
-    "dev:client": "vite",
-    "dev:server": "tsx watch server/index.ts",
-    "build": "tsc && vite build",
-    "test": "vitest",
-    "preview": "vite preview"
+    "dev": "tsx server/index.ts",
+    "build": "vite build",
+    "start": "NODE_ENV=production node dist/server/index.js",
+    "test": "vitest"
   },
   "dependencies": {
-    "socket.io-client": "^4.7.4",
-    "cors": "^2.8.5",
     "express": "^5.2.1",
-    "socket.io": "^4.8.1"
+    "socket.io": "^4.8.1",
+    "socket.io-client": "^4.7.4"
   },
   "devDependencies": {
     "typescript": "^5.9.3",
     "vite": "^5.0.8",
     "vitest": "^1.2.0",
+    "tsx": "^4.21.0",
     "@types/cors": "^2.8.19",
     "@types/express": "^5.0.6",
-    "@types/node": "^25.0.1",
-    "tsx": "^4.21.0"
+    "@types/node": "^25.0.1"
   }
 }
