@@ -3,8 +3,8 @@ import {Server} from "socket.io";
 export class DateTimeService {
     private interval?: NodeJS.Timeout;
 
-    public seconds: number = 1500;
-    public defaultSeconds: number = 1500;
+    private seconds: number = 1500;
+    private defaultSeconds: number = 1500;
 
     constructor(private io: Server) {}
 
@@ -40,5 +40,16 @@ export class DateTimeService {
         this.seconds = value;
         this.defaultSeconds = value;
         this.io.emit("updated_time", this.seconds);
+    }
+
+    public updateNumberOfSeconds(value: number): void {
+        this.seconds = value;
+    }
+    public getNumberOfSeconds(): number {
+        return this.seconds;
+    }
+
+    public getDefaultNumberOfSeconds(): Number {
+        return this.defaultSeconds;
     }
 }
