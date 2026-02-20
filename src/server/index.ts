@@ -51,7 +51,7 @@ async function bootstrap() {
 
     const PORT = 3000;
     httpServer.listen(PORT, () => {
-        console.log(`🚀 Unified server running at http://localhost:${PORT}`);
+        console.log(`🚀 Server running at http://localhost:${PORT}`);
     });
 }
 
