@@ -4,12 +4,9 @@
 It is a very simple count down timer.
 
 We use: `vite` and `vitest`.
-There are two parts: client and sever.
 
-To run the application.
-- In the client folder run `npm run dev`
-- In the server folder run `npm run dev`
+To run the application, run `npm run dev`
 
-To the test, in the client folder run `npm run test`
+To the test, run `npm run test`
 
 It is deployed in [Rail Way](https://leantime-production-d603.up.railway.app/)
