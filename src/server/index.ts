@@ -3,7 +3,7 @@ import { createServer as createHttpServer } from 'http';
 import { Server } from 'socket.io';
 import { createServer as createViteServer } from 'vite';
 import path from 'path';
-import {DateTimeService} from "./dateTimeService";
+import {DateTimeService} from "./dateTimeService.js";
 
 async function bootstrap() {
     const app = express();
