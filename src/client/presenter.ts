@@ -12,7 +12,7 @@ export class Presenter {
         view.subscribeWhenChangeThemeIsRequested(this.onChangeThemeIsRequestedHandler)
         view.subscribeWhenSettingsIsRequested(this.onSettingsIsRequestedHandler)
         view.subscribeWhenApplyTimeIsRequested(this.onApplyTimeIsRequestedHandler)
-        service.subscribeWhenTimeIsUpdated(this.onTimeIsUpdatedHandler);
+        service.subscribeWhenTimerIsUpdated(this.onTimerIsUpdatedHandler);
         view.hideSettings();
 
         const roomId = this.view.getRoomId();
@@ -20,25 +20,27 @@ export class Presenter {
     }
 
     private onStartIsRequestedHandler = (): void => {
-        this.service.start();
+        this.service.start(this.view.getRoomId());
     }
 
     private onStopIsRequestedHandler = (): void => {
-        this.service.pause();
+        const roomId = this.view.getRoomId();
+        this.service.pause(roomId);
     };
 
     private onResetIsRequestedHandler = (): void => {
         this.service.reset();
     };
 
-    private onTimeIsUpdatedHandler = (time: number): void => {
+    private onTimerIsUpdatedHandler = (time: number): void => {
         const minutes = Math.floor(time / 60);
         const seconds = time - minutes * 60;
         this.view.showTime(minutes, seconds);
 
         if(time === 0){
             this.sound.play();
-            this.service.pause();
+            const roomId = this.view.getRoomId();
+            this.service.pause(roomId);
             return;
         }
     };

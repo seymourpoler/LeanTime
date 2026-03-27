@@ -10,6 +10,12 @@ async function bootstrap() {
     const httpServer = createHttpServer(app);
     const io = new Server(httpServer);
     const dateTimeService = new DateTimeService(io);
+    type RoomTimer = {
+        timeLeft: number;
+        interval?: NodeJS.Timeout;
+        isRunning: boolean;
+    };
+    const roomTimers: Record<string, RoomTimer> = {};
 
     io.on("connection", (socket) => {
         console.log(`User connected: ${socket.id}`);
@@ -33,6 +39,68 @@ async function bootstrap() {
             console.log(`User apply: ${socket.id}`);
             console.log("time:", time);
             dateTimeService.updateSeconds(time);
+        });
+
+        socket.on("disconnect", () => {
+            console.log("User disconnected:", socket.id);
+        });
+
+        socket.on("join_room", (roomId: string) => {
+            socket.join(roomId);
+            console.log(`${socket.id} joined ${roomId}`);
+        });
+
+        socket.on("leave_room", (roomId: string) => {
+            socket.leave(roomId);
+        });
+
+        // type StartTimerArgs = {
+        //     sender: string;
+        //     roomId: string;
+        // };
+        const duration: number = 1500;
+        socket.on("start_timer", (args: {sender:string, roomId: string}) => {
+            console.log(`User started: ${args.sender} in room ${args.roomId}`);
+
+            if (roomTimers[args.roomId]?.interval) {
+                clearInterval(roomTimers[args.roomId].interval);
+            }
+            roomTimers[args.roomId] = {
+                timeLeft: duration,
+                isRunning: true,
+            };
+
+            const interval = setInterval(() => {
+                const timer = roomTimers[args.roomId];
+
+                if (!timer || !timer.isRunning) return;
+
+                timer.timeLeft--;
+
+                io.to(args.roomId).emit("timer_updated", timer.timeLeft);
+
+                if (timer.timeLeft <= 0) {
+                    clearInterval(interval);
+                    timer.isRunning = false;
+                }
+            }, 1000);
+
+            roomTimers[args.roomId].interval = interval;
+        });
+
+        socket.on("pause_timer", (args: {sender:string, roomId: string}) => {
+            console.log(`User paused: ${args.sender} in room ${args.roomId}`);
+
+            const timer = roomTimers[args.roomId];
+
+            if (!timer || !timer.isRunning) return;
+
+            timer.isRunning = false;
+
+            if (timer.interval) {
+                clearInterval(timer.interval);
+                timer.interval = undefined;
+            }
         });
     });
 

@@ -20,7 +20,7 @@ describe('Presenter', () => {
     });
 
     describe("When application is loaded", () =>{
-        it('start a new timer', () =>{
+        it('start a new room', () =>{
             (view.getRoomId as any).mockReturnValue("test");
 
             new Presenter(view, service, sound);
@@ -30,17 +30,18 @@ describe('Presenter', () => {
     })
 
     describe("When Start is requested", () => {
-        it('Starts', () =>{
+        it('starts', () => {
             let onStartIsRequestedHandler = () =>{};
             (view.subscribeWhenStartIsRequested as any).mockImplementation((handler: any) => {
                 onStartIsRequestedHandler = handler;
             });
+            (view.getRoomId as any).mockReturnValue("test");
             new Presenter(view, service, sound);
 
             onStartIsRequestedHandler();
 
-            expect(service.start).toHaveBeenCalled();
-        });
+            expect(service.start).toHaveBeenCalledWith("test");
+        })
     });
 
     describe("When Pause is requested", () => {
@@ -49,11 +50,12 @@ describe('Presenter', () => {
             (view.subscribeWhenPauseIsRequested as any).mockImplementation((handler: any) => {
                 onPauseIsRequestedHandler = handler;
             });
+            (view.getRoomId as any).mockReturnValue("test");
             new Presenter(view, service, sound);
 
             onPauseIsRequestedHandler();
 
-            expect(service.pause).toHaveBeenCalled();
+            expect(service.pause).toHaveBeenCalledWith("test");
         });
     });
 
@@ -85,37 +87,34 @@ describe('Presenter', () => {
         })
     })
 
-    describe("When timer is updated", () => {
-        describe("When timer is updated", () => {
-            it('shows the time', () => {
-                let onTimerIsUpdatedHandler: any;
-                (service.subscribeWhenTimeIsUpdated as any).mockImplementation((handler: any) => {
-                    onTimerIsUpdatedHandler = handler;
-                });
-                new Presenter(view, service, sound);
+    describe("When time is updated", () => {
+        let onTimerIsUpdatedHandler: any;
 
-                onTimerIsUpdatedHandler(25, 0);
-
-                expect(view.showTime).toHaveBeenCalled();
-            });
-        });
-    });
-
-    describe("When the time is up", () => {
-        it('sounds the alarm', () => {
-            let onTimerIsUpdatedHandler: any;
-            (service.subscribeWhenTimeIsUpdated as any).mockImplementation((handler: any) => {
+        beforeEach(() =>{
+            (service.subscribeWhenTimerIsUpdated as any).mockImplementation((handler: any) => {
                 onTimerIsUpdatedHandler = handler;
             });
+            (view.getRoomId as any).mockReturnValue("test");
             new Presenter(view, service, sound);
-
-            onTimerIsUpdatedHandler(0, 0);
-
-            expect(view.showTime).toHaveBeenCalledWith(0, 0);
-            expect(sound.play).toHaveBeenCalled();
-            expect(service.pause).toHaveBeenCalled();
         })
-    })
+
+        it('shows the time', () => {
+
+            onTimerIsUpdatedHandler(25, 0);
+
+            expect(view.showTime).toHaveBeenCalled();
+        });
+
+        describe("When the time is up", () => {
+            it('sounds the alarm', () => {
+                onTimerIsUpdatedHandler(0, 0);
+
+                expect(view.showTime).toHaveBeenCalledWith(0, 0);
+                expect(sound.play).toHaveBeenCalled();
+                expect(service.pause).toHaveBeenCalledWith("test");
+            })
+        })
+    });
 
     describe("When change theme is requested", () => {
         it('changes the theme', () => {

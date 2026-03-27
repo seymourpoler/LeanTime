@@ -7,18 +7,6 @@ export class Service {
         this.socket = io();
     }
 
-    public start() : void {
-        this.socket.emit('start',{
-            sender: this.socket.id || "Anonymous",
-        });
-    }
-
-    public pause() : void {
-        this.socket.emit('pause',{
-            sender: this.socket.id || "Anonymous",
-        });
-    }
-
     public reset() : void {
         this.socket.emit('reset',{
             sender: this.socket.id || "Anonymous",
@@ -29,13 +17,27 @@ export class Service {
         this.socket.emit('apply',seconds);
     }
 
-    public subscribeWhenTimeIsUpdated(handler:(time: number)=>void):void {
-        this.socket.on('updated_time', (time: number) => {
+    public joinRoom(roomId: string): void {
+        this.socket.emit('join_room', roomId);
+    }
+
+    public start(roomId: string) : void {
+        this.socket.emit('start_timer',{
+            sender: this.socket.id || "Anonymous",
+            roomId: roomId
+        });
+    }
+
+    public subscribeWhenTimerIsUpdated(handler:(time: number)=>void):void {
+        this.socket.on('timer_updated', (time: number) => {
             handler(time);
         });
     }
 
-    public joinRoom(roomId: string): void {
-        this.socket.emit('join_room', roomId);
+    public pause(roomId: string) : void {
+        this.socket.emit('pause_timer',{
+            sender: this.socket.id || "Anonymous",
+            roomId: roomId
+        });
     }
 }
