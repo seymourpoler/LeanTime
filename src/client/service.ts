@@ -7,10 +7,6 @@ export class Service {
         this.socket = io();
     }
 
-    public applyTime(seconds: number) : void {
-        this.socket.emit('apply',seconds);
-    }
-
     public joinRoom(roomId: string): void {
         this.socket.emit('join_room', roomId);
     }
@@ -39,6 +35,14 @@ export class Service {
         this.socket.emit('reset_timer',{
             sender: this.socket.id || "Anonymous",
             roomId: roomId
+        });
+    }
+
+    public applyTime(roomId: string, seconds: number) : void {
+        this.socket.emit('apply_timer', {
+            sender: this.socket.id || "Anonymous",
+            roomId: roomId,
+            seconds: seconds
         });
     }
 }

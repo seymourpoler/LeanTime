@@ -120,6 +120,17 @@ async function bootstrap() {
                 timer.interval = undefined;
             }
         });
+
+        socket.on('apply_timer', (args: {sender:string, roomId: string, time: number}) => {
+            console.log(`User reset: ${args.sender} in room ${args.roomId} with time ${args.time}`);
+
+            roomTimers[args.roomId] = {
+                timeLeft: args.time,
+                isRunning: false,
+                interval: undefined
+            };
+            io.to(args.roomId).emit("timer_updated", args.time);
+        });
     });
 
     if (process.env.NODE_ENV !== 'production') {

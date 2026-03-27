@@ -62,6 +62,7 @@ export class Presenter {
 
     private onApplyTimeIsRequestedHandler = (minutes: number, seconds: number): void => {
         const totalSeconds = minutes * 60 + seconds;
-        this.service.applyTime(totalSeconds);
+        const roomId = this.view.getRoomId();
+        this.service.applyTime(roomId, totalSeconds);
     }
 }

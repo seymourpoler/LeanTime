@@ -80,11 +80,12 @@ describe('Presenter', () => {
             (view.subscribeWhenApplyTimeIsRequested as any).mockImplementation((handler: any) => {
                 onApplyTimeIsRequestedHandler = handler;
             });
+            (view.getRoomId as any).mockReturnValue("test");
             new Presenter(view, service, sound);
 
             onApplyTimeIsRequestedHandler(25, 15);
 
-            expect(service.applyTime).toHaveBeenCalledWith(1515);
+            expect(service.applyTime).toHaveBeenCalledWith("test", 1515);
         })
     })
 
