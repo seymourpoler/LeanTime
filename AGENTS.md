@@ -14,4 +14,8 @@ Consult the appropriate file for detailed info on:
 - Testing tips
 - Change checklists
 
+
 For any changes to event contracts, API endpoints, or cross-boundary protocols, **always update both client and server docs**.
+
+For supporting architectural and workflow documentation (e.g., MVP, TDD, overview), see the `doc/` folder in the project root.
+
