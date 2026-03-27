@@ -7,7 +7,7 @@ export class Service {
         this.socket = io();
     }
 
-    public joinRoom(roomId: string): void {
+    public joinRoom(roomId: string) : void {
         this.socket.emit('join_room', roomId);
     }
 
@@ -18,7 +18,7 @@ export class Service {
         });
     }
 
-    public subscribeWhenTimerIsUpdated(handler:(time: number)=>void):void {
+    public subscribeWhenTimerIsUpdated(handler:(time: number)=>void) : void {
         this.socket.on('timer_updated', (time: number) => {
             handler(time);
         });
