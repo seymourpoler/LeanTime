@@ -93,4 +93,11 @@ export class View {
             element.style.display = 'none'
         }
     }
+
+    public getRoomId(): string{
+        const path = window.location.pathname;
+        const roomId = path.replace("/", "");
+
+        return roomId || "default";
+    }
 }

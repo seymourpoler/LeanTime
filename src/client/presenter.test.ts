@@ -19,6 +19,16 @@ describe('Presenter', () => {
         spyAllMethodsOf(sound);
     });
 
+    describe("When application is loaded", () =>{
+        it('start a new timer', () =>{
+            (view.getRoomId as any).mockReturnValue("test");
+
+            new Presenter(view, service, sound);
+
+            expect(service.joinRoom).toHaveBeenCalledWith("test");
+        })
+    })
+
     describe("When Start is requested", () => {
         it('Starts', () =>{
             let onStartIsRequestedHandler = () =>{};

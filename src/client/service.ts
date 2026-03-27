@@ -34,4 +34,8 @@ export class Service {
             handler(time);
         });
     }
+
+    public joinRoom(roomId: string): void {
+        this.socket.emit('join_room', roomId);
+    }
 }

@@ -14,6 +14,9 @@ export class Presenter {
         view.subscribeWhenApplyTimeIsRequested(this.onApplyTimeIsRequestedHandler)
         service.subscribeWhenTimeIsUpdated(this.onTimeIsUpdatedHandler);
         view.hideSettings();
+
+        const roomId = this.view.getRoomId();
+        this.service.joinRoom(roomId);
     }
 
     private onStartIsRequestedHandler = (): void => {
