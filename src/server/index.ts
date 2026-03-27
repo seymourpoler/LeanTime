@@ -61,14 +61,17 @@ async function bootstrap() {
         const duration: number = 1500;
         socket.on("start_timer", (args: {sender:string, roomId: string}) => {
             console.log(`User started: ${args.sender} in room ${args.roomId}`);
-
+            if(!roomTimers[args.roomId]){
+                roomTimers[args.roomId] = {
+                    timeLeft: duration,
+                    isRunning: false,
+                    interval: undefined
+                };
+            }
             if (roomTimers[args.roomId]?.interval) {
                 clearInterval(roomTimers[args.roomId].interval);
             }
-            roomTimers[args.roomId] = {
-                timeLeft: duration,
-                isRunning: true,
-            };
+            roomTimers[args.roomId].isRunning = true;
 
             const interval = setInterval(() => {
                 const timer = roomTimers[args.roomId];
@@ -92,7 +95,6 @@ async function bootstrap() {
             console.log(`User paused: ${args.sender} in room ${args.roomId}`);
 
             const timer = roomTimers[args.roomId];
-
             if (!timer || !timer.isRunning) return;
 
             timer.isRunning = false;
