@@ -7,12 +7,6 @@ export class Service {
         this.socket = io();
     }
 
-    public reset() : void {
-        this.socket.emit('reset',{
-            sender: this.socket.id || "Anonymous",
-        });
-    }
-
     public applyTime(seconds: number) : void {
         this.socket.emit('apply',seconds);
     }
@@ -36,6 +30,13 @@ export class Service {
 
     public pause(roomId: string) : void {
         this.socket.emit('pause_timer',{
+            sender: this.socket.id || "Anonymous",
+            roomId: roomId
+        });
+    }
+
+    public reset(roomId: string) : void {
+        this.socket.emit('reset_timer',{
             sender: this.socket.id || "Anonymous",
             roomId: roomId
         });

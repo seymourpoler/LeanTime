@@ -29,7 +29,8 @@ export class Presenter {
     };
 
     private onResetIsRequestedHandler = (): void => {
-        this.service.reset();
+        const roomId = this.view.getRoomId();
+        this.service.reset(roomId);
     };
 
     private onTimerIsUpdatedHandler = (time: number): void => {

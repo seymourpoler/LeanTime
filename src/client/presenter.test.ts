@@ -65,11 +65,12 @@ describe('Presenter', () => {
             (view.subscribeWhenResetIsRequested as any).mockImplementation((handler: any) => {
                 onResetIsRequestedHandler = handler;
             });
+            (view.getRoomId as any).mockReturnValue("test");
             new Presenter(view, service, sound);
 
             onResetIsRequestedHandler();
 
-            expect(service.reset).toHaveBeenCalled();
+            expect(service.reset).toHaveBeenCalledWith("test");
         });
     });
 
