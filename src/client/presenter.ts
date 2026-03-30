@@ -15,8 +15,7 @@ export class Presenter {
         service.subscribeWhenTimerIsUpdated(this.onTimerIsUpdatedHandler);
         view.hideSettings();
 
-        const roomId = this.view.getRoomId();
-        this.service.joinRoom(roomId);
+        this.service.joinRoom(this.view.getRoomId());
     }
 
     private onStartIsRequestedHandler = (): void => {
@@ -24,13 +23,11 @@ export class Presenter {
     }
 
     private onStopIsRequestedHandler = (): void => {
-        const roomId = this.view.getRoomId();
-        this.service.pause(roomId);
+        this.service.pause(this.view.getRoomId());
     };
 
     private onResetIsRequestedHandler = (): void => {
-        const roomId = this.view.getRoomId();
-        this.service.reset(roomId);
+        this.service.reset(this.view.getRoomId());
     };
 
     private onTimerIsUpdatedHandler = (time: number): void => {
@@ -40,8 +37,7 @@ export class Presenter {
 
         if(time === 0){
             this.sound.play();
-            const roomId = this.view.getRoomId();
-            this.service.pause(roomId);
+            this.service.pause(this.view.getRoomId());
             return;
         }
     };
@@ -62,7 +58,7 @@ export class Presenter {
 
     private onApplyTimeIsRequestedHandler = (minutes: number, seconds: number): void => {
         const totalSeconds = minutes * 60 + seconds;
-        const roomId = this.view.getRoomId();
-        this.service.applyTime(roomId, totalSeconds);
+
+        this.service.applyTime(this.view.getRoomId(), totalSeconds);
     }
 }
