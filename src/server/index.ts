@@ -4,20 +4,14 @@ import { Server } from 'socket.io';
 import { createServer as createViteServer } from 'vite';
 import path from 'path';
 import { ServerToClient } from './serverToClient';
+import { ConfigurationRoomTimer} from "./configurationRoomTimer";
 
 async function bootstrap() {
     const app = express();
     const httpServer = createHttpServer(app);
     const io = new Server(httpServer);
     const serverToClient = new ServerToClient(io);
-    const defaultNumberOfSeconds: number = 1500;
-    type RoomTimer = {
-        timeLeft: number;
-        interval?: NodeJS.Timeout;
-        isRunning: boolean;
-        configurationTime: number
-    };
-    const roomTimers: Record<string, RoomTimer> = {};
+    const configuration = new ConfigurationRoomTimer(serverToClient);
 
     io.on("connection", (socket) => {
         console.log(`User connected: ${socket.id}`);
@@ -42,76 +36,25 @@ async function bootstrap() {
         socket.on("start_timer", (args: {sender:string, roomId: string}) => {
             console.log(`User started: ${args.sender} in room ${args.roomId}`);
 
-            if(!roomTimers[args.roomId]){
-                roomTimers[args.roomId] = {
-                    timeLeft: defaultNumberOfSeconds,
-                    isRunning: false,
-                    interval: undefined,
-                    configurationTime: defaultNumberOfSeconds
-                };
-            }
-            if (roomTimers[args.roomId]?.interval) {
-                clearInterval(roomTimers[args.roomId].interval);
-            }
-            roomTimers[args.roomId].isRunning = true;
-
-            const interval = setInterval(() => {
-                const timer = roomTimers[args.roomId];
-
-                if (!timer || !timer.isRunning) return;
-
-                timer.timeLeft--;
-
-                serverToClient.timerUpdated(args.roomId, timer.timeLeft);
-
-                if (timer.timeLeft <= 0) {
-                    clearInterval(interval);
-                    timer.isRunning = false;
-                }
-            }, 1000);
-
-            roomTimers[args.roomId].interval = interval;
+            configuration.start(args.roomId);
         });
 
         socket.on("pause_timer", (args: {sender:string, roomId: string}) => {
             console.log(`User paused: ${args.sender} in room ${args.roomId}`);
 
-            const timer = roomTimers[args.roomId];
-            if (!timer || !timer.isRunning) return;
-
-            timer.isRunning = false;
-
-            if (timer.interval) {
-                clearInterval(timer.interval);
-                timer.interval = undefined;
-            }
+            configuration.pause(args.roomId);
         });
 
         socket.on('reset_timer', (args: {sender:string, roomId: string}) => {
             console.log(`User reset: ${args.sender} in room ${args.roomId}`);
 
-            const timer = roomTimers[args.roomId];
-            if (!timer) return;
-
-            timer.timeLeft = timer.configurationTime;
-
-            if (timer.interval) {
-                clearInterval(timer.interval);
-                timer.interval = undefined;
-            }
-            serverToClient.timerUpdated(args.roomId, timer.configurationTime);
+            configuration.reset(args.roomId);
         });
 
         socket.on('apply_timer', (args: {sender:string, roomId: string, seconds: number}) => {
             console.log(`User reset: ${args.sender} in room ${args.roomId} with time ${args.seconds}`);
 
-            roomTimers[args.roomId] = {
-                timeLeft: args.seconds,
-                isRunning: false,
-                interval: undefined,
-                configurationTime: args.seconds
-            };
-            serverToClient.timerUpdated(args.roomId, args.seconds);
+            configuration.apply(args.roomId, args.seconds);
         });
     });
 
