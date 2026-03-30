@@ -10,9 +10,6 @@ describe('ConfigureRoomTimer', () => {
         timer = new ConfigurationRoomTimer(serverToClient);
     });
 
-    afterEach(() => {
-        vi.useRealTimers();
-    });
 
     it('pause stops the timer and clears interval', () => {
         timer.pause(roomId);
@@ -57,5 +54,9 @@ describe('ConfigureRoomTimer', () => {
         expect(serverToClient.timerUpdated).toHaveBeenCalledWith(roomId, 0);
         vi.advanceTimersByTime(1000);
         expect(serverToClient.timerUpdated).toHaveBeenCalledTimes(7);
+    });
+
+    afterEach(() => {
+        vi.useRealTimers();
     });
 });
