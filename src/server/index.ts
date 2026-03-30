@@ -15,7 +15,8 @@ async function bootstrap() {
         interval?: NodeJS.Timeout;
         isRunning: boolean;
     };
-    const duration: number = 1500;
+    const defaultNumberOfSeconds: number = 1500;
+    let currentNumberOfSeconds: number = defaultNumberOfSeconds;
     const roomTimers: Record<string, RoomTimer> = {};
 
     io.on("connection", (socket) => {
@@ -63,7 +64,7 @@ async function bootstrap() {
             console.log(`User started: ${args.sender} in room ${args.roomId}`);
             if(!roomTimers[args.roomId]){
                 roomTimers[args.roomId] = {
-                    timeLeft: duration,
+                    timeLeft: currentNumberOfSeconds,
                     isRunning: false,
                     interval: undefined
                 };
@@ -108,8 +109,6 @@ async function bootstrap() {
         socket.on('reset_timer', (args: {sender:string, roomId: string}) => {
             console.log(`User reset: ${args.sender} in room ${args.roomId}`);
 
-            io.to(args.roomId).emit("timer_updated", duration);
-
             const timer = roomTimers[args.roomId];
             if (!timer || !timer.isRunning) return;
 
@@ -119,11 +118,13 @@ async function bootstrap() {
                 clearInterval(timer.interval);
                 timer.interval = undefined;
             }
+            timer.timeLeft = currentNumberOfSeconds;
+            io.to(args.roomId).emit("timer_updated", currentNumberOfSeconds);
         });
 
         socket.on('apply_timer', (args: {sender:string, roomId: string, seconds: number}) => {
             console.log(`User reset: ${args.sender} in room ${args.roomId} with time ${args.seconds}`);
-
+            currentNumberOfSeconds = args.seconds;
             roomTimers[args.roomId] = {
                 timeLeft: args.seconds,
                 isRunning: false,
