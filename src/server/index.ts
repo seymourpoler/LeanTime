@@ -3,13 +3,13 @@ import { createServer as createHttpServer } from 'http';
 import { Server } from 'socket.io';
 import { createServer as createViteServer } from 'vite';
 import path from 'path';
-import {DateTimeService} from "./dateTimeService.js";
+import { ServerToClient } from './serverToClient';
 
 async function bootstrap() {
     const app = express();
     const httpServer = createHttpServer(app);
     const io = new Server(httpServer);
-    const dateTimeService = new DateTimeService(io);
+    const serverToClient = new ServerToClient(io);
     const defaultNumberOfSeconds: number = 1500;
     type RoomTimer = {
         timeLeft: number;
@@ -41,6 +41,7 @@ async function bootstrap() {
         // };
         socket.on("start_timer", (args: {sender:string, roomId: string}) => {
             console.log(`User started: ${args.sender} in room ${args.roomId}`);
+
             if(!roomTimers[args.roomId]){
                 roomTimers[args.roomId] = {
                     timeLeft: defaultNumberOfSeconds,
@@ -61,7 +62,7 @@ async function bootstrap() {
 
                 timer.timeLeft--;
 
-                io.to(args.roomId).emit("timer_updated", timer.timeLeft);
+                serverToClient.timerUpdated(args.roomId, timer.timeLeft);
 
                 if (timer.timeLeft <= 0) {
                     clearInterval(interval);
@@ -98,7 +99,7 @@ async function bootstrap() {
                 clearInterval(timer.interval);
                 timer.interval = undefined;
             }
-            io.to(args.roomId).emit("timer_updated", timer.configurationTime);
+            serverToClient.timerUpdated(args.roomId, timer.configurationTime);
         });
 
         socket.on('apply_timer', (args: {sender:string, roomId: string, seconds: number}) => {
@@ -110,7 +111,7 @@ async function bootstrap() {
                 interval: undefined,
                 configurationTime: args.seconds
             };
-            io.to(args.roomId).emit("timer_updated", args.seconds);
+            serverToClient.timerUpdated(args.roomId, args.seconds);
         });
     });
 
