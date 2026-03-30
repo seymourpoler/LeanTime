@@ -3,36 +3,58 @@ import { createServer as createHttpServer } from 'http';
 import { Server } from 'socket.io';
 import { createServer as createViteServer } from 'vite';
 import path from 'path';
-import {DateTimeService} from "./dateTimeService.js";
+import { ServerToClient } from './serverToClient';
+import { ConfigurationRoomTimer} from "./configurationRoomTimer";
 
 async function bootstrap() {
     const app = express();
     const httpServer = createHttpServer(app);
     const io = new Server(httpServer);
-    const dateTimeService = new DateTimeService(io);
+    const serverToClient = new ServerToClient(io);
+    const configuration = new ConfigurationRoomTimer(serverToClient);
 
     io.on("connection", (socket) => {
         console.log(`User connected: ${socket.id}`);
 
-        socket.on('start', (sender) => {
-            console.log(`User started: ${sender}`);
-            dateTimeService.start();
+        socket.on("disconnect", () => {
+            console.log("User disconnected:", socket.id);
         });
 
-        socket.on("pause", () => {
-            console.log(`User pause: ${socket.id}`);
-            dateTimeService.pause();
+        socket.on("join_room", (roomId: string) => {
+            socket.join(roomId);
+            console.log(`${socket.id} joined ${roomId}`);
         });
 
-        socket.on('reset', () => {
-            console.log(`User reset: ${socket.id}`);
-            dateTimeService.reset()
+        socket.on("leave_room", (roomId: string) => {
+            socket.leave(roomId);
         });
 
-        socket.on('apply', (time: number) => {
-            console.log(`User apply: ${socket.id}`);
-            console.log("time:", time);
-            dateTimeService.updateSeconds(time);
+        // type StartTimerArgs = {
+        //     sender: string;
+        //     roomId: string;
+        // };
+        socket.on("start_timer", (args: {sender:string, roomId: string}) => {
+            console.log(`User started: ${args.sender} in room ${args.roomId}`);
+
+            configuration.start(args.roomId);
+        });
+
+        socket.on("pause_timer", (args: {sender:string, roomId: string}) => {
+            console.log(`User paused: ${args.sender} in room ${args.roomId}`);
+
+            configuration.pause(args.roomId);
+        });
+
+        socket.on('reset_timer', (args: {sender:string, roomId: string}) => {
+            console.log(`User reset: ${args.sender} in room ${args.roomId}`);
+
+            configuration.reset(args.roomId);
+        });
+
+        socket.on('apply_timer', (args: {sender:string, roomId: string, seconds: number}) => {
+            console.log(`User reset: ${args.sender} in room ${args.roomId} with time ${args.seconds}`);
+
+            configuration.apply(args.roomId, args.seconds);
         });
     });
 

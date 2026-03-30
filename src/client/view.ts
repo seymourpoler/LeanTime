@@ -1,5 +1,5 @@
 export class View {
-    public subscribeWhenStartIsRequested (handler: () => void):void{
+    public subscribeWhenStartIsRequested (handler: () => void) : void{
         document.getElementById('start')?.addEventListener('click', (event: Event) => {
             event.preventDefault();
 
@@ -7,7 +7,7 @@ export class View {
         });
     }
 
-    public subscribeWhenPauseIsRequested(handler: () => void):void{
+    public subscribeWhenPauseIsRequested(handler: () => void) : void{
         document.getElementById('pause')?.addEventListener('click', (event: Event) => {
             event.preventDefault();
 
@@ -15,7 +15,7 @@ export class View {
         });
     }
 
-    public subscribeWhenResetIsRequested(handler: () => void):void{
+    public subscribeWhenResetIsRequested(handler: () => void) : void{
         document.getElementById('reset')?.addEventListener('click', (event: Event) => {
             event.preventDefault();
 
@@ -23,7 +23,7 @@ export class View {
         });
     }
 
-    public subscribeWhenChangeThemeIsRequested(handler: () => void):void{
+    public subscribeWhenChangeThemeIsRequested(handler: () => void) : void{
         document.getElementById('theme-toggle')?.addEventListener('click', (event: Event) => {
             event.preventDefault();
 
@@ -31,7 +31,7 @@ export class View {
         });
     }
 
-    public subscribeWhenSettingsIsRequested(handler: () => void):void{
+    public subscribeWhenSettingsIsRequested(handler: () => void) : void{
         document.getElementById('settings')?.addEventListener('click', (event: Event) => {
             event.preventDefault();
 
@@ -39,7 +39,7 @@ export class View {
         });
     }
 
-    public subscribeWhenApplyTimeIsRequested(handler: (minutes: number, seconds: number) => void):void{
+    public subscribeWhenApplyTimeIsRequested(handler: (minutes: number, seconds: number) => void) : void{
         document.getElementById('apply-config')?.addEventListener('click', (event: Event) => {
             event.preventDefault();
 
@@ -51,7 +51,7 @@ export class View {
         });
     }
 
-    public showTime(minutes: number, seconds: number){
+    public showTime(minutes: number, seconds: number) : void{
         const minutesEl = document.getElementById('minutes');
         const secondsEl = document.getElementById('seconds');
 
@@ -63,7 +63,7 @@ export class View {
         }
     }
 
-    public changeTheme(){
+    public changeTheme() : void{
         const themeToggle = document.getElementById('theme-toggle');
         const body = document.body;
         const savedTheme = localStorage.getItem('theme');
@@ -80,17 +80,24 @@ export class View {
         if(themeToggle) themeToggle.textContent = isDark ? '☀️' : '🌙';
     }
 
-    public showSettings(): void{
+    public showSettings() : void{
         const element = document.getElementById('configuration');
         if(element){
             element.style.display = 'block'
         }
     }
 
-    public hideSettings(): void{
+    public hideSettings() : void{
         const element = document.getElementById('configuration');
         if(element){
             element.style.display = 'none'
         }
+    }
+
+    public getRoomId() : string{
+        const path = window.location.pathname;
+        const roomId = path.replace("/", "");
+
+        return roomId || "default";
     }
 }

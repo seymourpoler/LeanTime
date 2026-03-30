@@ -12,30 +12,32 @@ export class Presenter {
         view.subscribeWhenChangeThemeIsRequested(this.onChangeThemeIsRequestedHandler)
         view.subscribeWhenSettingsIsRequested(this.onSettingsIsRequestedHandler)
         view.subscribeWhenApplyTimeIsRequested(this.onApplyTimeIsRequestedHandler)
-        service.subscribeWhenTimeIsUpdated(this.onTimeIsUpdatedHandler);
+        service.subscribeWhenTimerIsUpdated(this.onTimerIsUpdatedHandler);
         view.hideSettings();
+
+        this.service.joinRoom(this.view.getRoomId());
     }
 
     private onStartIsRequestedHandler = (): void => {
-        this.service.start();
+        this.service.start(this.view.getRoomId());
     }
 
     private onStopIsRequestedHandler = (): void => {
-        this.service.pause();
+        this.service.pause(this.view.getRoomId());
     };
 
     private onResetIsRequestedHandler = (): void => {
-        this.service.reset();
+        this.service.reset(this.view.getRoomId());
     };
 
-    private onTimeIsUpdatedHandler = (time: number): void => {
+    private onTimerIsUpdatedHandler = (time: number): void => {
         const minutes = Math.floor(time / 60);
         const seconds = time - minutes * 60;
         this.view.showTime(minutes, seconds);
 
         if(time === 0){
             this.sound.play();
-            this.service.pause();
+            this.service.pause(this.view.getRoomId());
             return;
         }
     };
@@ -56,6 +58,7 @@ export class Presenter {
 
     private onApplyTimeIsRequestedHandler = (minutes: number, seconds: number): void => {
         const totalSeconds = minutes * 60 + seconds;
-        this.service.applyTime(totalSeconds);
+
+        this.service.applyTime(this.view.getRoomId(), totalSeconds);
     }
 }

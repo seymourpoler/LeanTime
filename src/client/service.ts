@@ -7,31 +7,42 @@ export class Service {
         this.socket = io();
     }
 
-    public start() : void {
-        this.socket.emit('start',{
+    public joinRoom(roomId: string) : void {
+        this.socket.emit('join_room', roomId);
+    }
+
+    public start(roomId: string) : void {
+        this.socket.emit('start_timer',{
             sender: this.socket.id || "Anonymous",
+            roomId: roomId
         });
     }
 
-    public pause() : void {
-        this.socket.emit('pause',{
-            sender: this.socket.id || "Anonymous",
-        });
-    }
-
-    public reset() : void {
-        this.socket.emit('reset',{
-            sender: this.socket.id || "Anonymous",
-        });
-    }
-
-    public applyTime(seconds: number) : void {
-        this.socket.emit('apply',seconds);
-    }
-
-    public subscribeWhenTimeIsUpdated(handler:(time: number)=>void):void {
-        this.socket.on('updated_time', (time: number) => {
+    public subscribeWhenTimerIsUpdated(handler:(time: number)=>void) : void {
+        this.socket.on('timer_updated', (time: number) => {
             handler(time);
+        });
+    }
+
+    public pause(roomId: string) : void {
+        this.socket.emit('pause_timer',{
+            sender: this.socket.id || "Anonymous",
+            roomId: roomId
+        });
+    }
+
+    public reset(roomId: string) : void {
+        this.socket.emit('reset_timer',{
+            sender: this.socket.id || "Anonymous",
+            roomId: roomId
+        });
+    }
+
+    public applyTime(roomId: string, seconds: number) : void {
+        this.socket.emit('apply_timer', {
+            sender: this.socket.id || "Anonymous",
+            roomId: roomId,
+            seconds: seconds
         });
     }
 }
