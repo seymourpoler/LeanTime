@@ -121,15 +121,15 @@ async function bootstrap() {
             }
         });
 
-        socket.on('apply_timer', (args: {sender:string, roomId: string, time: number}) => {
-            console.log(`User reset: ${args.sender} in room ${args.roomId} with time ${args.time}`);
+        socket.on('apply_timer', (args: {sender:string, roomId: string, seconds: number}) => {
+            console.log(`User reset: ${args.sender} in room ${args.roomId} with time ${args.seconds}`);
 
             roomTimers[args.roomId] = {
-                timeLeft: args.time,
+                timeLeft: args.seconds,
                 isRunning: false,
                 interval: undefined
             };
-            io.to(args.roomId).emit("timer_updated", args.time);
+            io.to(args.roomId).emit("timer_updated", args.seconds);
         });
     });
 
