@@ -16,11 +16,13 @@ describe('Service', () => {
 
     it('joinRoom emits join_room with roomId', () => {
         service.joinRoom('roomA');
+
         expect(socket.emit).toHaveBeenCalledWith('join_room', 'roomA');
     });
 
     it('start emits start_timer with sender and roomId', () => {
         service.start('roomB');
+
         expect(socket.emit).toHaveBeenCalledWith('start_timer', {
             sender: 'test-socket-id',
             roomId: 'roomB'
@@ -28,17 +30,17 @@ describe('Service', () => {
     });
 
     it('subscribeWhenTimerIsUpdated registers handler for timer_updated', () => {
+        socket.on.mockImplementation((_event: string, cb: Function) => cb(42));
         const handler = vi.fn();
+
         service.subscribeWhenTimerIsUpdated(handler);
-        expect(socket.on).toHaveBeenCalledWith('timer_updated', expect.any(Function));
-        // Simulate event
-        const callback = socket.on.mock.calls[0][1];
-        callback(42);
+
         expect(handler).toHaveBeenCalledWith(42);
     });
 
     it('pause emits pause_timer with sender and roomId', () => {
         service.pause('roomC');
+
         expect(socket.emit).toHaveBeenCalledWith('pause_timer', {
             sender: 'test-socket-id',
             roomId: 'roomC'
@@ -47,6 +49,7 @@ describe('Service', () => {
 
     it('reset emits reset_timer with sender and roomId', () => {
         service.reset('roomD');
+
         expect(socket.emit).toHaveBeenCalledWith('reset_timer', {
             sender: 'test-socket-id',
             roomId: 'roomD'
@@ -55,6 +58,7 @@ describe('Service', () => {
 
     it('applyTime emits apply_timer with sender, roomId, and seconds', () => {
         service.applyTime('roomE', 99);
+
         expect(socket.emit).toHaveBeenCalledWith('apply_timer', {
             sender: 'test-socket-id',
             roomId: 'roomE',
