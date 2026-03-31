@@ -4,14 +4,14 @@ import { Server } from 'socket.io';
 import { createServer as createViteServer } from 'vite';
 import path from 'path';
 import { ServerToClient } from './serverToClient';
-import { ConfigurationRoomTimer} from "./configurationRoomTimer";
+import { ConfigurationTimer } from "./configurationTimer";
 
 async function bootstrap() {
     const app = express();
     const httpServer = createHttpServer(app);
     const io = new Server(httpServer);
     const serverToClient = new ServerToClient(io);
-    const configuration = new ConfigurationRoomTimer(serverToClient);
+    const configurationTimer = new ConfigurationTimer(serverToClient);
 
     io.on("connection", (socket) => {
         console.log(`User connected: ${socket.id}`);
@@ -36,25 +36,25 @@ async function bootstrap() {
         socket.on("start_timer", (args: {sender:string, roomId: string}) => {
             console.log(`User started: ${args.sender} in room ${args.roomId}`);
 
-            configuration.start(args.roomId);
+            configurationTimer.start(args.roomId);
         });
 
         socket.on("pause_timer", (args: {sender:string, roomId: string}) => {
             console.log(`User paused: ${args.sender} in room ${args.roomId}`);
 
-            configuration.pause(args.roomId);
+            configurationTimer.pause(args.roomId);
         });
 
         socket.on('reset_timer', (args: {sender:string, roomId: string}) => {
             console.log(`User reset: ${args.sender} in room ${args.roomId}`);
 
-            configuration.reset(args.roomId);
+            configurationTimer.reset(args.roomId);
         });
 
         socket.on('apply_timer', (args: {sender:string, roomId: string, seconds: number}) => {
             console.log(`User reset: ${args.sender} in room ${args.roomId} with time ${args.seconds}`);
 
-            configuration.apply(args.roomId, args.seconds);
+            configurationTimer.apply(args.roomId, args.seconds);
         });
     });
 
