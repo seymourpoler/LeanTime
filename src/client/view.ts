@@ -94,10 +94,10 @@ export class View {
         }
     }
 
-    public getRoomId() : string{
+    public getTimerId() : string{
         const path = window.location.pathname;
-        const roomId = path.replace("/", "");
+        const timerId = path.replace("/", "");
 
-        return roomId || "default";
+        return timerId || "default";
     }
 }

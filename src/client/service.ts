@@ -7,14 +7,14 @@ export class Service {
         this.socket = socket
     }
 
-    public joinRoom(roomId: string) : void {
-        this.socket.emit('join_room', roomId);
+    public joinTimer(timerId: string) : void {
+        this.socket.emit('join_timer', timerId);
     }
 
-    public start(roomId: string) : void {
+    public start(timerId: string) : void {
         this.socket.emit('start_timer',{
             sender: this.socket.id || "Anonymous",
-            roomId: roomId
+            timerId: timerId
         });
     }
 
@@ -24,24 +24,24 @@ export class Service {
         });
     }
 
-    public pause(roomId: string) : void {
+    public pause(timerId: string) : void {
         this.socket.emit('pause_timer',{
             sender: this.socket.id || "Anonymous",
-            roomId: roomId
+            timerId: timerId
         });
     }
 
-    public reset(roomId: string) : void {
+    public reset(timerId: string) : void {
         this.socket.emit('reset_timer',{
             sender: this.socket.id || "Anonymous",
-            roomId: roomId
+            timerId: timerId
         });
     }
 
-    public applyTime(roomId: string, seconds: number) : void {
+    public applyTime(timerId: string, seconds: number) : void {
         this.socket.emit('apply_timer', {
             sender: this.socket.id || "Anonymous",
-            roomId: roomId,
+            timerId: timerId,
             seconds: seconds
         });
     }

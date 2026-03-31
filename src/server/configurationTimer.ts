@@ -4,7 +4,7 @@ type Timer = {
     timeLeft: number;
     interval?: NodeJS.Timeout;
     isRunning: boolean;
-    configurationTime: number
+    time: number
 };
 
 export class ConfigurationTimer {
@@ -23,7 +23,7 @@ export class ConfigurationTimer {
                 timeLeft: this.defaultNumberOfSeconds,
                 isRunning: false,
                 interval: undefined,
-                configurationTime: this.defaultNumberOfSeconds
+                time: this.defaultNumberOfSeconds
             };
         }
         if (this.timers[timerId].interval) {
@@ -65,13 +65,13 @@ export class ConfigurationTimer {
         const timer = this.timers[timerId];
         if (!timer) return;
 
-        timer.timeLeft = timer.configurationTime;
+        timer.timeLeft = timer.time;
 
         if (timer.interval) {
             clearInterval(timer.interval);
             timer.interval = undefined;
         }
-        this.serverToClient.timerUpdated(timerId, timer.configurationTime);
+        this.serverToClient.timerUpdated(timerId, timer.time);
     }
 
     public apply(timerId: string, seconds: number): void {
@@ -79,7 +79,7 @@ export class ConfigurationTimer {
             timeLeft: seconds,
             isRunning: false,
             interval: undefined,
-            configurationTime: seconds
+            time: seconds
         };
         if(seconds < 0){
             this.serverToClient.timerUpdated(timerId, 0);
@@ -87,5 +87,4 @@ export class ConfigurationTimer {
         }
         this.serverToClient.timerUpdated(timerId, seconds);
     }
-
 }
