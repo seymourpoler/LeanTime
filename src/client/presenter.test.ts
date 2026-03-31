@@ -4,16 +4,19 @@ import {View} from "./view";
 import {Service} from "./service";
 import {Presenter} from "./presenter";
 import {Sound} from "./sound";
+import {Server} from "socket.io";
+import {Socket} from "socket.io-client";
 
 describe('Presenter', () => {
     let view : View;
     let service: Service;
     let sound: Sound;
+    const socket = {} as Socket;
 
     beforeEach(() =>{
         view = new View();
         spyAllMethodsOf(view);
-        service = new Service();
+        service = new Service(socket);
         spyAllMethodsOf(service);
         sound = new Sound();
         spyAllMethodsOf(sound);
