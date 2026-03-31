@@ -4,7 +4,6 @@ import {View} from "./view";
 import {Service} from "./service";
 import {Presenter} from "./presenter";
 import {Sound} from "./sound";
-import {Server} from "socket.io";
 import {Socket} from "socket.io-client";
 
 describe('Presenter', () => {
