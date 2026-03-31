@@ -1,10 +1,10 @@
-import {io, Socket} from 'socket.io-client';
+import { Socket } from 'socket.io-client';
 
 export class Service {
     private readonly socket: Socket;
 
-    constructor(){
-        this.socket = io();
+    constructor(socket: Socket){
+        this.socket = socket
     }
 
     public joinRoom(roomId: string) : void {
