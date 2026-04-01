@@ -4,7 +4,7 @@ name: Dispatcher
 description: "dispatcher tasks"
 category: development
 mode: primary
-model: OpenAI/ChatGPT-4.1
+model: openai/gpt-4.1
 temperature: 0.2
 
 # Tags

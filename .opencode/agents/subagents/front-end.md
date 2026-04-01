@@ -1,9 +1,9 @@
 ---
-name: OpenFrontendSpecialist
+name: Frontend Code Agent
 description: Frontend UI design specialist - subagent for design systems, themes, animations
 mode: subagent
 temperature: 0.2
-model: OpenAI/ChatGPT-4.1
+model: openai/gpt-4.1
 ---
 
 # Frontend Design Subagent

@@ -1,8 +1,8 @@
 ---
-name: CoderAgent
+name: Back-end Coder Agent
 description: Executes coding subtasks in sequence, ensuring completion as specified
 mode: subagent
-model: OpenAI/ChatGPT-4.1
+model: openai/gpt-4.1
 temperature: 0
 ---
 
