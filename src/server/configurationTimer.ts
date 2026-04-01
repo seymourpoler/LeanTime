@@ -1,44 +1,44 @@
 import {ServerToClient} from "./serverToClient";
 
-type RoomTimer = {
+type Timer = {
     timeLeft: number;
     interval?: NodeJS.Timeout;
     isRunning: boolean;
-    configurationTime: number
+    time: number
 };
 
-export class ConfigurationRoomTimer {
+export class ConfigurationTimer {
     private readonly defaultNumberOfSeconds: number = 1500;
     private readonly serverToClient: ServerToClient;
-    private readonly roomTimers: Record<string, RoomTimer>;
+    private readonly timers: Record<string, Timer>;
 
     constructor(serverToClient: ServerToClient) {
-        this.roomTimers = {};
+        this.timers = {};
         this.serverToClient = serverToClient;
     }
 
-    public start(roomId: string): void {
-        if(!this.roomTimers[roomId]){
-            this.roomTimers[roomId] = {
+    public start(timerId: string): void {
+        if(!this.timers[timerId]){
+            this.timers[timerId] = {
                 timeLeft: this.defaultNumberOfSeconds,
                 isRunning: false,
                 interval: undefined,
-                configurationTime: this.defaultNumberOfSeconds
+                time: this.defaultNumberOfSeconds
             };
         }
-        if (this.roomTimers[roomId]?.interval) {
-            clearInterval(this.roomTimers[roomId].interval);
+        if (this.timers[timerId].interval) {
+            clearInterval(this.timers[timerId].interval);
         }
-        this.roomTimers[roomId].isRunning = true;
+        this.timers[timerId].isRunning = true;
 
         const interval = setInterval(() => {
-            const timer = this.roomTimers[roomId];
+            const timer = this.timers[timerId];
 
             if (!timer || !timer.isRunning) return;
 
             timer.timeLeft--;
 
-            this.serverToClient.timerUpdated(roomId, timer.timeLeft);
+            this.serverToClient.timerUpdated(timerId, timer.timeLeft);
 
             if (timer.timeLeft <= 0) {
                 clearInterval(interval);
@@ -46,11 +46,11 @@ export class ConfigurationRoomTimer {
             }
         }, 1000);
 
-        this.roomTimers[roomId].interval = interval;
+        this.timers[timerId].interval = interval;
     }
 
-    public pause(roomId: string): void {
-        const timer = this.roomTimers[roomId];
+    public pause(timerId: string): void {
+        const timer = this.timers[timerId];
         if (!timer || !timer.isRunning) return;
 
         timer.isRunning = false;
@@ -61,27 +61,30 @@ export class ConfigurationRoomTimer {
         }
     }
 
-    public reset(roomId: string): void {
-        const timer = this.roomTimers[roomId];
+    public reset(timerId: string): void {
+        const timer = this.timers[timerId];
         if (!timer) return;
 
-        timer.timeLeft = timer.configurationTime;
+        timer.timeLeft = timer.time;
 
         if (timer.interval) {
             clearInterval(timer.interval);
             timer.interval = undefined;
         }
-        this.serverToClient.timerUpdated(roomId, timer.configurationTime);
+        this.serverToClient.timerUpdated(timerId, timer.time);
     }
 
-    public apply(roomId: string, seconds: number): void {
-        this.roomTimers[roomId] = {
+    public apply(timerId: string, seconds: number): void {
+        this.timers[timerId] = {
             timeLeft: seconds,
             isRunning: false,
             interval: undefined,
-            configurationTime: seconds
+            time: seconds
         };
-        this.serverToClient.timerUpdated(roomId, seconds);
+        if(seconds < 0){
+            this.serverToClient.timerUpdated(timerId, 0);
+            return;
+        }
+        this.serverToClient.timerUpdated(timerId, seconds);
     }
-
 }

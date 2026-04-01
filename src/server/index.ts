@@ -4,14 +4,14 @@ import { Server } from 'socket.io';
 import { createServer as createViteServer } from 'vite';
 import path from 'path';
 import { ServerToClient } from './serverToClient';
-import { ConfigurationRoomTimer} from "./configurationRoomTimer";
+import { ConfigurationTimer } from "./configurationTimer";
 
 async function bootstrap() {
     const app = express();
     const httpServer = createHttpServer(app);
     const io = new Server(httpServer);
     const serverToClient = new ServerToClient(io);
-    const configuration = new ConfigurationRoomTimer(serverToClient);
+    const configurationTimer = new ConfigurationTimer(serverToClient);
 
     io.on("connection", (socket) => {
         console.log(`User connected: ${socket.id}`);
@@ -20,41 +20,41 @@ async function bootstrap() {
             console.log("User disconnected:", socket.id);
         });
 
-        socket.on("join_room", (roomId: string) => {
-            socket.join(roomId);
-            console.log(`${socket.id} joined ${roomId}`);
+        socket.on("join_timer", (timerId: string) => {
+            socket.join(timerId);
+            console.log(`${socket.id} joined ${timerId}`);
         });
 
-        socket.on("leave_room", (roomId: string) => {
-            socket.leave(roomId);
+        socket.on("leave_timer", (timerId: string) => {
+            socket.leave(timerId);
         });
 
         // type StartTimerArgs = {
         //     sender: string;
         //     roomId: string;
         // };
-        socket.on("start_timer", (args: {sender:string, roomId: string}) => {
-            console.log(`User started: ${args.sender} in room ${args.roomId}`);
+        socket.on("start_timer", (args: {sender:string, timerId: string}) => {
+            console.log(`User started: ${args.sender} in timer ${args.timerId}`);
 
-            configuration.start(args.roomId);
+            configurationTimer.start(args.timerId);
         });
 
-        socket.on("pause_timer", (args: {sender:string, roomId: string}) => {
-            console.log(`User paused: ${args.sender} in room ${args.roomId}`);
+        socket.on("pause_timer", (args: {sender:string, timerId: string}) => {
+            console.log(`User paused: ${args.sender} in timer ${args.timerId}`);
 
-            configuration.pause(args.roomId);
+            configurationTimer.pause(args.timerId);
         });
 
-        socket.on('reset_timer', (args: {sender:string, roomId: string}) => {
-            console.log(`User reset: ${args.sender} in room ${args.roomId}`);
+        socket.on('reset_timer', (args: {sender:string, timerId: string}) => {
+            console.log(`User reset: ${args.sender} in timer ${args.timerId}`);
 
-            configuration.reset(args.roomId);
+            configurationTimer.reset(args.timerId);
         });
 
-        socket.on('apply_timer', (args: {sender:string, roomId: string, seconds: number}) => {
-            console.log(`User reset: ${args.sender} in room ${args.roomId} with time ${args.seconds}`);
+        socket.on('apply_timer', (args: {sender:string, timerId: string, seconds: number}) => {
+            console.log(`User reset: ${args.sender} in timer ${args.timerId} with time ${args.seconds}`);
 
-            configuration.apply(args.roomId, args.seconds);
+            configurationTimer.apply(args.timerId, args.seconds);
         });
     });
 

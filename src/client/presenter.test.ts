@@ -4,16 +4,18 @@ import {View} from "./view";
 import {Service} from "./service";
 import {Presenter} from "./presenter";
 import {Sound} from "./sound";
+import {Socket} from "socket.io-client";
 
 describe('Presenter', () => {
     let view : View;
     let service: Service;
     let sound: Sound;
+    const socket = {} as Socket;
 
     beforeEach(() =>{
         view = new View();
         spyAllMethodsOf(view);
-        service = new Service();
+        service = new Service(socket);
         spyAllMethodsOf(service);
         sound = new Sound();
         spyAllMethodsOf(sound);
@@ -21,11 +23,11 @@ describe('Presenter', () => {
 
     describe("When application is loaded", () =>{
         it('start a new room', () =>{
-            (view.getRoomId as any).mockReturnValue("test");
+            (view.getTimerId as any).mockReturnValue("test");
 
             new Presenter(view, service, sound);
 
-            expect(service.joinRoom).toHaveBeenCalledWith("test");
+            expect(service.joinTimer).toHaveBeenCalledWith("test");
         })
     })
 
@@ -35,7 +37,7 @@ describe('Presenter', () => {
             (view.subscribeWhenStartIsRequested as any).mockImplementation((handler: any) => {
                 onStartIsRequestedHandler = handler;
             });
-            (view.getRoomId as any).mockReturnValue("test");
+            (view.getTimerId as any).mockReturnValue("test");
             new Presenter(view, service, sound);
 
             onStartIsRequestedHandler();
@@ -50,7 +52,7 @@ describe('Presenter', () => {
             (view.subscribeWhenPauseIsRequested as any).mockImplementation((handler: any) => {
                 onPauseIsRequestedHandler = handler;
             });
-            (view.getRoomId as any).mockReturnValue("test");
+            (view.getTimerId as any).mockReturnValue("test");
             new Presenter(view, service, sound);
 
             onPauseIsRequestedHandler();
@@ -65,7 +67,7 @@ describe('Presenter', () => {
             (view.subscribeWhenResetIsRequested as any).mockImplementation((handler: any) => {
                 onResetIsRequestedHandler = handler;
             });
-            (view.getRoomId as any).mockReturnValue("test");
+            (view.getTimerId as any).mockReturnValue("test");
             new Presenter(view, service, sound);
 
             onResetIsRequestedHandler();
@@ -80,7 +82,7 @@ describe('Presenter', () => {
             (view.subscribeWhenApplyTimeIsRequested as any).mockImplementation((handler: any) => {
                 onApplyTimeIsRequestedHandler = handler;
             });
-            (view.getRoomId as any).mockReturnValue("test");
+            (view.getTimerId as any).mockReturnValue("test");
             new Presenter(view, service, sound);
 
             onApplyTimeIsRequestedHandler(25, 15);
@@ -96,7 +98,7 @@ describe('Presenter', () => {
             (service.subscribeWhenTimerIsUpdated as any).mockImplementation((handler: any) => {
                 onTimerIsUpdatedHandler = handler;
             });
-            (view.getRoomId as any).mockReturnValue("test");
+            (view.getTimerId as any).mockReturnValue("test");
             new Presenter(view, service, sound);
         })
 

@@ -15,19 +15,19 @@ export class Presenter {
         service.subscribeWhenTimerIsUpdated(this.onTimerIsUpdatedHandler);
         view.hideSettings();
 
-        this.service.joinRoom(this.view.getRoomId());
+        this.service.joinTimer(this.view.getTimerId());
     }
 
     private onStartIsRequestedHandler = (): void => {
-        this.service.start(this.view.getRoomId());
+        this.service.start(this.view.getTimerId());
     }
 
     private onStopIsRequestedHandler = (): void => {
-        this.service.pause(this.view.getRoomId());
+        this.service.pause(this.view.getTimerId());
     };
 
     private onResetIsRequestedHandler = (): void => {
-        this.service.reset(this.view.getRoomId());
+        this.service.reset(this.view.getTimerId());
     };
 
     private onTimerIsUpdatedHandler = (time: number): void => {
@@ -37,7 +37,7 @@ export class Presenter {
 
         if(time === 0){
             this.sound.play();
-            this.service.pause(this.view.getRoomId());
+            this.service.pause(this.view.getTimerId());
             return;
         }
     };
@@ -59,6 +59,6 @@ export class Presenter {
     private onApplyTimeIsRequestedHandler = (minutes: number, seconds: number): void => {
         const totalSeconds = minutes * 60 + seconds;
 
-        this.service.applyTime(this.view.getRoomId(), totalSeconds);
+        this.service.applyTime(this.view.getTimerId(), totalSeconds);
     }
 }
