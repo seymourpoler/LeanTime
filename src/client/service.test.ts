@@ -30,8 +30,8 @@ describe('Service', () => {
     });
 
     it('subscribeWhenTimerIsUpdated registers handler for timer_updated', () => {
-        socket.on.mockImplementation((_event: string, cb: Function) => cb(42));
         const handler = vi.fn();
+        socket.on.mockImplementation((_event: string, cb: Function) => cb(42));
 
         service.subscribeWhenTimerIsUpdated(handler);
 
