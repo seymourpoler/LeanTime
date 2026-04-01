@@ -3,7 +3,7 @@ name: Frontend Code Agent
 description: Frontend UI design specialist - subagent for design systems, themes, animations
 mode: subagent
 temperature: 0.2
-model: openai/gpt-4.1
+model: gpt-4o
 ---
 
 # Frontend Design Subagent

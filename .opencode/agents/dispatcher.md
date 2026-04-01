@@ -2,10 +2,14 @@
 id: Dispatcher
 name: Dispatcher
 description: "dispatcher tasks"
-category: development
 mode: primary
-model: openai/gpt-4.1
+model: gpt-4o
 temperature: 0.2
+subtask: true
+tools:
+  write: false
+  edit: false
+  bash: false
 
 # Tags
 tags:

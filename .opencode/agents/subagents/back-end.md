@@ -2,7 +2,7 @@
 name: Back-end Coder Agent
 description: Executes coding subtasks in sequence, ensuring completion as specified
 mode: subagent
-model: openai/gpt-4.1
+model: gpt-4o
 temperature: 0
 ---
 

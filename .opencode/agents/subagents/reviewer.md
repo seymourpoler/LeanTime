@@ -1,7 +1,7 @@
 ---
 description: Review uncommitted changes
 mode: subagent
-model: openai/gpt-4.1
+model: gpt-4o
 temperature: 0.05
 reasoningEffort: high
 textVerbosity: low
