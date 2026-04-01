@@ -14,9 +14,9 @@ describe('ServerToClient', () => {
     });
 
     it('should emit timer_updated event with correct arguments', () => {
-        serverToClient.timerUpdated('room42', 123);
+        serverToClient.timerUpdated('timer42', 123);
 
-        expect(io.to).toHaveBeenCalledWith('room42');
+        expect(io.to).toHaveBeenCalledWith('timer42');
         expect(io.emit).toHaveBeenCalledWith('timer_updated', 123);
     });
 });
