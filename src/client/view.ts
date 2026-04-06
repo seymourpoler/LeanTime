@@ -52,11 +52,11 @@ export class View {
     }
 
     public showTime(minutes: number, seconds: number) : void {
-        const minutesEl = document.getElementById('minutes');
-        const secondsEl = document.getElementById('seconds');
+        const htmlElementMinutes = document.getElementById('minutes');
+        const htmlElementSeconds = document.getElementById('seconds');
 
-        if (minutesEl) minutesEl.innerHTML = getTwoDigitsNumber(minutes);
-        if (secondsEl) secondsEl.innerHTML = getTwoDigitsNumber(seconds);
+        if (htmlElementMinutes) htmlElementMinutes.innerHTML = getTwoDigitsNumber(minutes);
+        if (htmlElementSeconds) htmlElementSeconds.innerHTML = getTwoDigitsNumber(seconds);
 
         function getTwoDigitsNumber(value: number): string {
             return value.toString().padStart(2, '0');
@@ -81,16 +81,17 @@ export class View {
     }
 
     public showSettings() : void {
-        const element = document.getElementById('configuration');
-        if(element){
-            element.style.display = 'block'
-        }
+        this.settings('block');
     }
 
     public hideSettings() : void {
+        this.settings('none');
+    }
+
+    private settings (display: string):void{
         const element = document.getElementById('configuration');
         if(element){
-            element.style.display = 'none'
+            element.style.display = display
         }
     }
 
