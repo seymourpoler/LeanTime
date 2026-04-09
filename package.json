@@ -13,7 +13,7 @@
   "license": "GPL v3",
   "scripts": {
     "dev": "tsx src/server/index.ts",
-    "build": "tsc",
+    "build": "vite build && tsc",
     "start": "NODE_ENV=production node dist/server/index.js",
     "test": "vitest --run",
     "test:watch": "vitest",
