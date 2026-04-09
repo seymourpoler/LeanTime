@@ -12,6 +12,7 @@
   "exclude": [
     "node_modules",
     "vite.config.ts",
-    "**/*.test.ts",
+    "src/testing.ts",
+    "**/*.test.ts"
   ]
 }
