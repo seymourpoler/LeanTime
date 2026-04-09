@@ -1,4 +1,4 @@
-import {ServerToClient} from "./serverToClient";
+import {ServerToClient} from "./serverToClient.js";
 
 type Timer = {
     timeLeft: number;

@@ -3,9 +3,10 @@
     "compilerOptions": {
     "outDir": "dist",
         "rootDir": "src",
-        "module": "ESNext",
+        "module": "NodeNext",
         "target": "ESNext",
-        "moduleResolution": "node"
+        "moduleResolution": "nodenext",
+    "ignoreDeprecations": "6.0"
 },
     "include": ["src/server/**/*.ts"]
 }
