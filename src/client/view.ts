@@ -51,6 +51,13 @@ export class View {
         });
     }
 
+    public subscribeWhenVolumeIsChanged(handler: (volume: number) => void): void {
+        document.getElementById('volume-slider')?.addEventListener('input', (event: Event) => {
+            const input = event.target as HTMLInputElement;
+            handler(parseFloat(input.value));
+        });
+    }
+
     public showTime(minutes: number, seconds: number) : void {
         const htmlElementMinutes = document.getElementById('minutes');
         const htmlElementSeconds = document.getElementById('seconds');

@@ -12,9 +12,11 @@ export class Presenter {
         view.subscribeWhenChangeThemeIsRequested(this.onChangeThemeIsRequestedHandler)
         view.subscribeWhenSettingsIsRequested(this.onSettingsIsRequestedHandler)
         view.subscribeWhenApplyTimeIsRequested(this.onApplyTimeIsRequestedHandler)
+        view.subscribeWhenVolumeIsChanged(this.onVolumeIsChangedHandler)
         service.subscribeWhenTimerIsUpdated(this.onTimerIsUpdatedHandler);
         view.hideSettings();
 
+        this.sound.setVolume(0.25);
         this.service.joinTimer(this.view.getTimerId());
     }
 
@@ -60,5 +62,9 @@ export class Presenter {
         const totalSeconds = minutes * 60 + seconds;
 
         this.service.applyTime(this.view.getTimerId(), totalSeconds);
+    }
+
+    private onVolumeIsChangedHandler = (volume: number): void => {
+        this.sound.setVolume(volume);
     }
 }
