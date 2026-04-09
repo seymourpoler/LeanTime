@@ -13,7 +13,7 @@
   "license": "GPL v3",
   "scripts": {
     "dev": "tsx src/server/index.ts",
-    "build": "vite build && tsc --project tsconfig.server.json",
+    "build": "tsc",
     "start": "NODE_ENV=production node dist/server/index.js",
     "test": "vitest --run",
     "test:watch": "vitest",
@@ -27,7 +27,7 @@
   "devDependencies": {
     "@types/cors": "^2.8.19",
     "@types/express": "^5.0.6",
-    "@types/node": "^25.0.1",
+    "@types/node": "^25.5.2",
     "@vitest/coverage-v8": "^4.1.1",
     "tsx": "^4.21.0",
     "typescript": "^6.0.2",
