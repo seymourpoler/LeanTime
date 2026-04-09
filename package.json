@@ -14,7 +14,7 @@
   "scripts": {
     "dev": "tsx src/server/index.ts",
     "build": "vite build && tsc --project tsconfig.server.json",
-    "start": "NODE_ENV=production node dist/index.js",
+    "start": "NODE_ENV=production node dist/server/index.js",
     "test": "vitest --run",
     "test:watch": "vitest",
     "test:coverage": "vitest run --coverage"
