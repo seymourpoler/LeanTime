@@ -4,17 +4,18 @@ import { Sound } from "./sound";
 describe("Sound", () => {
     let play: ReturnType<typeof vi.fn>;
     let audioConstructor: any;
-    let mockAudioInstance: { play: ReturnType<typeof vi.fn>; volume: number };
+    let mockAudioInstance: { play: ReturnType<typeof vi.fn>; volume: number; addEventListener: ReturnType<typeof vi.fn> };
 
     let sound: Sound;
 
     beforeEach(() => {
         play = vi.fn();
         audioConstructor = vi.fn();
-        mockAudioInstance = { play, volume: 1 };
+        mockAudioInstance = { play, volume: 1, addEventListener: vi.fn() };
         class MockAudio {
             play = play;
             volume = 1;
+            addEventListener = vi.fn();
             constructor(src: string) {
                 audioConstructor(src);
                 mockAudioInstance = this as any;
@@ -65,6 +66,16 @@ describe("Sound", () => {
         it("uses 25% volume by default when setVolume is never called", () => {
             sound.play();
             expect(mockAudioInstance.volume).toBe(0.25);
+        });
+    });
+
+    describe("subscribeWhenSoundEnds", () => {
+        it("registers the handler on the audio 'ended' event", () => {
+            const handler = vi.fn();
+
+            sound.subscribeWhenSoundEnds(handler);
+
+            expect(mockAudioInstance.addEventListener).toHaveBeenCalledWith('ended', handler);
         });
     });
 });

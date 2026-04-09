@@ -191,4 +191,19 @@ describe('Presenter', () => {
             expect(sound.setVolume).toHaveBeenCalledWith(0.4);
         });
     });
+
+    describe("When sound ends", () => {
+        it("resets the timer so the configured time is shown again", () => {
+            let onSoundEndsHandler: () => void = () => {};
+            (sound.subscribeWhenSoundEnds as any).mockImplementation((handler: any) => {
+                onSoundEndsHandler = handler;
+            });
+            (view.getTimerId as any).mockReturnValue("test");
+            new Presenter(view, service, sound);
+
+            onSoundEndsHandler();
+
+            expect(service.reset).toHaveBeenCalledWith("test");
+        });
+    });
 });

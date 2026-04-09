@@ -14,6 +14,7 @@ export class Presenter {
         view.subscribeWhenApplyTimeIsRequested(this.onApplyTimeIsRequestedHandler)
         view.subscribeWhenVolumeIsChanged(this.onVolumeIsChangedHandler)
         service.subscribeWhenTimerIsUpdated(this.onTimerIsUpdatedHandler);
+        sound.subscribeWhenSoundEnds(this.onSoundEndsHandler);
         view.hideSettings();
 
         this.sound.setVolume(0.25);
@@ -66,5 +67,9 @@ export class Presenter {
 
     private onVolumeIsChangedHandler = (volume: number): void => {
         this.sound.setVolume(volume);
+    }
+
+    private onSoundEndsHandler = (): void => {
+        this.service.reset(this.view.getTimerId());
     }
 }

@@ -13,4 +13,8 @@ export class Sound {
     public play(): void {
         this.audio.play();
     }
+
+    public subscribeWhenSoundEnds(handler: () => void): void {
+        this.audio.addEventListener('ended', handler);
+    }
 }
