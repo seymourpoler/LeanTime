@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { ServerToClient } from './serverToClient.js';
+import { ServerToClient } from './serverToClient';
 
 describe('ServerToClient', () => {
     let io: any;
