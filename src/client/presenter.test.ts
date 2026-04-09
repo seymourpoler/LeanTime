@@ -1,9 +1,9 @@
 import {beforeEach, describe, expect, it, vi} from "vitest";
-import {spyAllMethodsOf} from "../testing";
-import {View} from "./view";
-import {Service} from "./service";
-import {Presenter} from "./presenter";
-import {Sound} from "./sound";
+import {spyAllMethodsOf} from "../testing.js";
+import {View} from "./view.js";
+import {Service} from "./service.js";
+import {Presenter} from "./presenter.js";
+import {Sound} from "./sound.js";
 import {Socket} from "socket.io-client";
 
 describe('Presenter', () => {

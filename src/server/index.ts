@@ -3,8 +3,8 @@ import { createServer as createHttpServer } from 'http';
 import { Server } from 'socket.io';
 import { createServer as createViteServer } from 'vite';
 import path from 'path';
-import { ServerToClient } from './serverToClient';
-import { ConfigurationTimer } from "./configurationTimer";
+import { ServerToClient } from './serverToClient.js';
+import { ConfigurationTimer } from "./configurationTimer.js";
 
 async function bootstrap() {
     const app = express();

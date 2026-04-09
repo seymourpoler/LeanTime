@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
-import { ConfigurationTimer } from './configurationTimer';
+import { ConfigurationTimer } from './configurationTimer.js';
 
 describe('ConfigurationTimer', () => {
     let timer: ConfigurationTimer;

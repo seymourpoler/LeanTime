@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
-import { Sound } from "./sound";
+import { Sound } from "./sound.js";
 
 describe("Sound", () => {
     let play: ReturnType<typeof vi.fn>;

@@ -1,6 +1,6 @@
-import {View} from "./view";
-import {Service} from "./service";
-import {Sound} from "./sound";
+import {View} from "./view.js";
+import {Service} from "./service.js";
+import {Sound} from "./sound.js";
 
 export class Presenter {
     private isShowSettings: boolean = true;

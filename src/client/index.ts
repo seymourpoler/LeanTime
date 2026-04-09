@@ -1,7 +1,7 @@
-import { Service } from "./service";
-import { View } from "./view";
-import { Presenter } from "./presenter";
-import { Sound } from "./sound";
+import { Service } from "./service.js";
+import { View } from "./view.js";
+import { Presenter } from "./presenter.js";
+import { Sound } from "./sound.js";
 import { io } from 'socket.io-client';
 
 const sound = new Sound();

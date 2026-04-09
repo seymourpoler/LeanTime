@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { Service } from './service';
+import { Service } from './service.js';
 
 describe('Service', () => {
     let service: Service;
