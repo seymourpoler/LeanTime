@@ -108,7 +108,7 @@ Tests include:
 
 ## Deployment
 
-LeanTime is currently deployed on [Railway](https://leantime-production-d603.up.railway.app/). You can access the live instance using the link.
+LeanTime is currently deployed on [Render](https://leantime-bfz4.onrender.com/). You can access the live instance using the link.
 
 ---
 
