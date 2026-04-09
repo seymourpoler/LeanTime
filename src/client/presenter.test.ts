@@ -1,4 +1,4 @@
-import {beforeEach, describe, expect, it} from "vitest";
+import {beforeEach, describe, expect, it, vi} from "vitest";
 import {spyAllMethodsOf} from "../testing";
 import {View} from "./view";
 import {Service} from "./service";
@@ -13,6 +13,14 @@ describe('Presenter', () => {
     const socket = {} as Socket;
 
     beforeEach(() =>{
+        class MockAudio {
+            play = vi.fn();
+            volume = 1;
+            constructor() {}
+        }
+        // @ts-ignore
+        globalThis.Audio = MockAudio as any;
+
         view = new View();
         spyAllMethodsOf(view);
         service = new Service(socket);
@@ -28,6 +36,12 @@ describe('Presenter', () => {
             new Presenter(view, service, sound);
 
             expect(service.joinTimer).toHaveBeenCalledWith("test");
+        })
+
+        it('initializes the volume to 25%', () => {
+            new Presenter(view, service, sound);
+
+            expect(sound.setVolume).toHaveBeenCalledWith(0.25);
         })
     })
 
@@ -163,4 +177,33 @@ describe('Presenter', () => {
             expect(view.hideSettings).toHaveBeenCalled();
         })
     })
+
+    describe("When volume is changed", () => {
+        it("delegates the new volume to the sound", () => {
+            let onVolumeIsChangedHandler: (volume: number) => void = () => {};
+            (view.subscribeWhenVolumeIsChanged as any).mockImplementation((handler: any) => {
+                onVolumeIsChangedHandler = handler;
+            });
+            new Presenter(view, service, sound);
+
+            onVolumeIsChangedHandler(0.4);
+
+            expect(sound.setVolume).toHaveBeenCalledWith(0.4);
+        });
+    });
+
+    describe("When sound ends", () => {
+        it("resets the timer so the configured time is shown again", () => {
+            let onSoundEndsHandler: () => void = () => {};
+            (sound.subscribeWhenSoundEnds as any).mockImplementation((handler: any) => {
+                onSoundEndsHandler = handler;
+            });
+            (view.getTimerId as any).mockReturnValue("test");
+            new Presenter(view, service, sound);
+
+            onSoundEndsHandler();
+
+            expect(service.reset).toHaveBeenCalledWith("test");
+        });
+    });
 });

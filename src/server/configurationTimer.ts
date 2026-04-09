@@ -29,6 +29,9 @@ export class ConfigurationTimer {
         if (this.timers[timerId].interval) {
             clearInterval(this.timers[timerId].interval);
         }
+        if (this.timers[timerId].timeLeft <= 0) {
+            this.timers[timerId].timeLeft = this.timers[timerId].time;
+        }
         this.timers[timerId].isRunning = true;
 
         const interval = setInterval(() => {
