@@ -71,7 +71,7 @@ async function bootstrap() {
         app.use(express.static(distPath));
     }
 
-    const PORT = 3000;
+    const PORT = process.env.PORT || 3000;
     httpServer.listen(PORT, () => {
         console.log(`🚀 Server running at http://localhost:${PORT}`);
     });
