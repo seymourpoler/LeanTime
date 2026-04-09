@@ -71,13 +71,7 @@ async function bootstrap() {
         app.use(express.static(distPath));
     }
 
-    // const PORT = process.env.PORT || 3000;
-    // httpServer.listen(PORT, () => {
-    //     console.log(`🚀 Server running at http://localhost:${PORT}`);
-    // });
-
     const port: number = Number(process.env.PORT) || 3000;
-
     httpServer.listen(port, "0.0.0.0", () => {
         console.log(`🚀 Server running on port ${port}`);
     });
