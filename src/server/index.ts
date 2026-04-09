@@ -76,7 +76,11 @@ async function bootstrap() {
     //     console.log(`🚀 Server running at http://localhost:${PORT}`);
     // });
 
-    const port = process.env.PORT || 3000;
+    const port: number = Number(process.env.PORT) || 3000;
+
+    app.listen(port, "0.0.0.0", () => {
+        console.log(`🚀 Server running on port ${port}`);
+    });
 
     httpServer.listen(port, "0.0.0.0", () => {
         console.log(`🚀 Server running on port ${port}`);
