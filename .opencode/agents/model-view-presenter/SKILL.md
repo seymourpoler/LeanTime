@@ -1,3 +1,9 @@
+---
+name: model-view-presenter-passive-view
+description: "This skill embodies the mvp pattern by Martin Fowler. The UI is split between a view that handles display and a controller that responds to user gestures"
+risk: safe
+source: "Martin Fowler (https://martinfowler.com/eaaDev/PassiveScreen.html)"
+---
 # Model-View-Presenter (Passive View)
 
 ## What is MVP and Passive View?

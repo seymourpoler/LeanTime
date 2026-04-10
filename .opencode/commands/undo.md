@@ -1,6 +1,6 @@
 ---
-description: Deshace el último cambio.
+description: Undo the last change.
 agent: build
 ---
 
-Este comando deshace el último cambio. Puedes ejecutarlo múltiples veces para ir hacia atrás en el historial.
+This command undoes the last change. You can run it multiple times to go back through the history.

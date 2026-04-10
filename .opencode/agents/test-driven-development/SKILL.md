@@ -1,3 +1,9 @@
+---
+name: model-view-presenter-passive-view
+description: "This skill embodies the technique Test Driven Development (TDD) by Kent Beck. Test-Driven Development (TDD) is a technique for building software that guides software development by writing tests.
+risk: safe
+source: "Kent Beck (https://martinfowler.com/bliki/TestDrivenDevelopment.html)"
+---
 # Test Driven Development (TDD)
 
 ## What is TDD?
