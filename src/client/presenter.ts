@@ -4,6 +4,7 @@ import {Sound} from "./sound.js";
 
 export class Presenter {
     private isShowSettings: boolean = true;
+    private totalSeconds: number = 1500;
 
     constructor(private readonly view: View, private readonly service: Service, private readonly sound: Sound) {
         view.subscribeWhenStartIsRequested(this.onStartIsRequestedHandler);
@@ -17,6 +18,7 @@ export class Presenter {
         sound.subscribeWhenSoundEnds(this.onSoundEndsHandler);
         view.hideSettings();
 
+        this.view.showProgression(100);
         this.sound.setVolume(0.25);
         this.service.joinTimer(this.view.getTimerId());
     }
@@ -37,6 +39,7 @@ export class Presenter {
         const minutes = Math.floor(time / 60);
         const seconds = time - minutes * 60;
         this.view.showTime(minutes, seconds);
+        this.view.showProgression(Math.max(0, Math.min(100, Math.round(100 * (time / this.totalSeconds)))));
 
         if(time === 0){
             this.sound.play();
@@ -60,16 +63,16 @@ export class Presenter {
     };
 
     private onApplyTimeIsRequestedHandler = (minutes: number, seconds: number): void => {
-        const totalSeconds = minutes * 60 + seconds;
+        this.totalSeconds = minutes * 60 + seconds;
 
-        this.service.applyTime(this.view.getTimerId(), totalSeconds);
-    }
+        this.service.applyTime(this.view.getTimerId(), this.totalSeconds);
+    };
 
     private onVolumeIsChangedHandler = (volume: number): void => {
         this.sound.setVolume(volume);
-    }
+    };
 
     private onSoundEndsHandler = (): void => {
         this.service.reset(this.view.getTimerId());
-    }
+    };
 }

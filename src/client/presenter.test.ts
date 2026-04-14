@@ -36,6 +36,12 @@ describe('Presenter', () => {
             new Presenter(view, service, sound);
 
             expect(service.joinTimer).toHaveBeenCalledWith("test");
+        });
+
+        it('initializes the progress bar', () => {
+            new Presenter(view, service, sound);
+
+            expect(view.showProgression).toHaveBeenCalledWith(100);
         })
 
         it('initializes the volume to 25%', () => {
@@ -58,7 +64,7 @@ describe('Presenter', () => {
 
             expect(service.start).toHaveBeenCalledWith("test");
         })
-    });
+    })
 
     describe("When Pause is requested", () => {
         it('Pauses', () =>{
@@ -73,7 +79,7 @@ describe('Presenter', () => {
 
             expect(service.pause).toHaveBeenCalledWith("test");
         });
-    });
+    })
 
     describe("When Reset is requested", () => {
         it('Resets', () =>{
@@ -88,7 +94,7 @@ describe('Presenter', () => {
 
             expect(service.reset).toHaveBeenCalledWith("test");
         });
-    });
+    })
 
     describe("When Apply time is requested", () => {
         it('Applies', () =>{
@@ -117,10 +123,30 @@ describe('Presenter', () => {
         })
 
         it('shows the time', () => {
-
             onTimerIsUpdatedHandler(25, 0);
 
             expect(view.showTime).toHaveBeenCalled();
+        })
+
+        it('updates progress bar to 100% when time equals totalSeconds (default 1500)', () => {
+            // 1500 out of 1500 should be 100%
+            onTimerIsUpdatedHandler(1500);
+            expect(view.showProgression).toHaveBeenCalledWith(100);
+        });
+
+        it('updates progress bar to ~50% when time equals half totalSeconds (default 750)', () => {
+            onTimerIsUpdatedHandler(750);
+            expect(view.showProgression).toHaveBeenCalledWith(50);
+        });
+
+        it('updates progress bar to 0% when time is 0', () => {
+            onTimerIsUpdatedHandler(0);
+            expect(view.showProgression).toHaveBeenCalledWith(0);
+        });
+
+        it('updates progress bar at an arbitrary value (e.g. 375/1500 = 25%)', () => {
+            onTimerIsUpdatedHandler(375);
+            expect(view.showProgression).toHaveBeenCalledWith(25);
         });
 
         describe("When the time is up", () => {
@@ -132,7 +158,7 @@ describe('Presenter', () => {
                 expect(service.pause).toHaveBeenCalledWith("test");
             })
         })
-    });
+    })
 
     describe("When change theme is requested", () => {
         it('changes the theme', () => {
