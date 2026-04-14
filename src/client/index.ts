@@ -1,13 +1,13 @@
-import { Service } from "./service.js";
-import { View } from "./view.js";
-import { Presenter } from "./presenter.js";
-import { Sound } from "./sound.js";
+import { Service as TimerService } from "./timer/service.js";
+import { View as TimerView }  from "./timer/view.js";
+import { Presenter as TimerPresenter } from "./timer/presenter.js";
+import { Sound } from "./timer/sound.js";
 import { io } from 'socket.io-client';
 
 const sound = new Sound();
-const service = new Service(io());
-const view = new View();
-new Presenter(view, service, sound);
+const timerService = new TimerService(io());
+const timerView = new TimerView();
+new TimerPresenter(timerView, timerService, sound);
 
 // Tabs logic
 const tabTimer = document.getElementById('tab-timer');

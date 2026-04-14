@@ -1,7 +1,7 @@
-import { describe, beforeEach, it, expect } from "vitest";
-import { View } from "./view.js";
-import { Presenter } from "./presenter.js";
-import { spyAllMethodsOf } from "../testing.js";
+import { describe, it, beforeEach, expect } from "vitest";
+import { Presenter } from "../presenter.js";
+import { View } from "../view.js";
+import { spyAllMethodsOf } from "../../testing.js";
 
 describe('Presenter', () => {
     let presenter: Presenter;
