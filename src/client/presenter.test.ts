@@ -58,7 +58,7 @@ describe('Presenter', () => {
 
             expect(service.start).toHaveBeenCalledWith("test");
         })
-    });
+    })
 
     describe("When Pause is requested", () => {
         it('Pauses', () =>{
@@ -73,7 +73,7 @@ describe('Presenter', () => {
 
             expect(service.pause).toHaveBeenCalledWith("test");
         });
-    });
+    })
 
     describe("When Reset is requested", () => {
         it('Resets', () =>{
@@ -88,7 +88,7 @@ describe('Presenter', () => {
 
             expect(service.reset).toHaveBeenCalledWith("test");
         });
-    });
+    })
 
     describe("When Apply time is requested", () => {
         it('Applies', () =>{
@@ -117,11 +117,16 @@ describe('Presenter', () => {
         })
 
         it('shows the time', () => {
-
             onTimerIsUpdatedHandler(25, 0);
 
             expect(view.showTime).toHaveBeenCalled();
-        });
+        })
+
+        it('updates progress bar', () => {
+            onTimerIsUpdatedHandler(15, 47);
+
+            expect(view.showProgression).toHaveBeenCalledWith(0.01);
+        })
 
         describe("When the time is up", () => {
             it('sounds the alarm', () => {
@@ -132,7 +137,7 @@ describe('Presenter', () => {
                 expect(service.pause).toHaveBeenCalledWith("test");
             })
         })
-    });
+    })
 
     describe("When change theme is requested", () => {
         it('changes the theme', () => {
