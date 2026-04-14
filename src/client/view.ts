@@ -70,6 +70,13 @@ export class View {
         }
     }
 
+    public showProgression(percentage: number): void {
+        const progressBar = document.getElementById('progress-bar');
+        if (progressBar) {
+            progressBar.style.width = `${percentage}%`;
+        }
+    }
+
     public changeTheme() : void {
         const themeToggle = document.getElementById('theme-toggle');
         const body = document.body;
@@ -78,13 +85,17 @@ export class View {
 
         if (savedTheme === 'dark' || (!savedTheme && systemPrefersDark)) {
             body.classList.add('dark');
-            if (themeToggle) themeToggle.textContent = '☀️';
+            if (themeToggle) {
+                themeToggle.textContent = '☀️';
+            }
         }
         body.classList.toggle('dark');
         const isDark = body.classList.contains('dark');
         localStorage.setItem('theme', isDark ? 'dark' : 'light');
 
-        if(themeToggle) themeToggle.textContent = isDark ? '☀️' : '🌙';
+        if(themeToggle) {
+            themeToggle.textContent = isDark ? '☀️' : '🌙';
+        }
     }
 
     public showSettings() : void {
