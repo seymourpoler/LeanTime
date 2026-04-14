@@ -71,9 +71,13 @@ export class View {
     }
 
     public showProgression(percentage: number): void {
-        const progressBar = document.getElementById('progress-bar');
+        const progressBar = document.querySelector('.progress-bar') as HTMLElement;
+        const label = document.querySelector('.progress-label') as HTMLElement;
         if (progressBar) {
             progressBar.style.width = `${percentage}%`;
+        }
+        if (label) {
+            label.textContent = `${Math.floor(percentage)}%`;
         }
     }
 

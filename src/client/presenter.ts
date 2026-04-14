@@ -18,6 +18,7 @@ export class Presenter {
         sound.subscribeWhenSoundEnds(this.onSoundEndsHandler);
         view.hideSettings();
 
+        this.view.showProgression(100);
         this.sound.setVolume(0.25);
         this.service.joinTimer(this.view.getTimerId());
     }
@@ -38,7 +39,7 @@ export class Presenter {
         const minutes = Math.floor(time / 60);
         const seconds = time - minutes * 60;
         this.view.showTime(minutes, seconds);
-        this.view.showProgression(time/this.totalSeconds);
+        this.view.showProgression(Math.max(0, Math.min(100, Math.round(100 * (time / this.totalSeconds)))));
 
         if(time === 0){
             this.sound.play();
