@@ -6,6 +6,7 @@ export class Presenter {
     constructor(private readonly view: View, private readonly timerPresenter: TimerPresenter, private readonly taskPresenter: TaskPresenter) {
         view.subscribeWhenChangeThemeIsRequested(this.onChangeThemeIsRequestedHandler)
         timerPresenter.show()
+        taskPresenter.hide()
     }
 
     private onChangeThemeIsRequestedHandler = (): void => {

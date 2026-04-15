@@ -47,6 +47,7 @@ describe('Presenter', () => {
             new Presenter(view, timerPresenter, taskPresenter);
 
             expect(timerPresenter.show).toHaveBeenCalled();
+            expect(taskPresenter.hide).toHaveBeenCalled();
         })
     })
 
