@@ -1,16 +1,20 @@
 import { vi } from "vitest";
 
+/**
+ * Spies all methods on the prototype chain, and ensures any provided method names are also mocked.
+ */
 export function spyAllMethodsOf<T extends object>(element: T): void {
-    const proto = Object.getPrototypeOf(element);
-
-    // Get all property names from the class prototype
-    const propertyNames = Object.getOwnPropertyNames(proto);
-
-    for (const name of propertyNames) {
-        // We only want to spy on methods (functions), not the constructor
-        if (name !== 'constructor' && typeof (element as any)[name] === 'function') {
-            // Overwrite the method on the instance with a vitest mock
-            (element as any)[name] = vi.fn();
+    // Walk up prototype chain (excluding Object.prototype)
+    let proto = Object.getPrototypeOf(element);
+    const seen = new Set<string>();
+    while (proto && proto !== Object.prototype) {
+        const propertyNames = Object.getOwnPropertyNames(proto);
+        for (const name of propertyNames) {
+            if (name !== 'constructor' && !seen.has(name)) {
+                (element as any)[name] = vi.fn();
+                seen.add(name);
+            }
         }
+        proto = Object.getPrototypeOf(proto);
     }
 }

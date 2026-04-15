@@ -160,20 +160,6 @@ describe('Presenter', () => {
         })
     })
 
-    describe("When change theme is requested", () => {
-        it('changes the theme', () => {
-            let onChangeThemeIsRequestedHandler: any;
-            (view.subscribeWhenChangeThemeIsRequested as any).mockImplementation((handler: any) => {
-                onChangeThemeIsRequestedHandler = handler;
-            });
-            new Presenter(view, service, sound);
-
-            onChangeThemeIsRequestedHandler();
-
-            expect(view.changeTheme).toHaveBeenCalled();
-        })
-    })
-
     describe("When showing settings is requested", () => {
         it('shows settings', () =>{
             let onSettingsIsRequestedHandler: any;
@@ -216,7 +202,7 @@ describe('Presenter', () => {
 
             expect(sound.setVolume).toHaveBeenCalledWith(0.4);
         });
-    });
+    })
 
     describe("When sound ends", () => {
         it("resets the timer so the configured time is shown again", () => {
@@ -231,5 +217,5 @@ describe('Presenter', () => {
 
             expect(service.reset).toHaveBeenCalledWith("test");
         });
-    });
+    })
 });

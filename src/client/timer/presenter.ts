@@ -1,26 +1,24 @@
-import {View} from "./view.js";
-import {Service} from "./service.js";
-import {Sound} from "./sound.js";
+import { View } from "./view.js";
+import { Service } from "./service.js";
+import { Sound } from "./sound.js";
 
 export class Presenter {
     private isShowSettings: boolean = true;
     private totalSeconds: number = 1500;
 
     constructor(private readonly view: View, private readonly service: Service, private readonly sound: Sound) {
-        view.subscribeWhenStartIsRequested(this.onStartIsRequestedHandler);
-        view.subscribeWhenPauseIsRequested(this.onStopIsRequestedHandler);
-        view.subscribeWhenResetIsRequested(this.onResetIsRequestedHandler);
-        view.subscribeWhenChangeThemeIsRequested(this.onChangeThemeIsRequestedHandler)
+        view.subscribeWhenStartIsRequested(this.onStartIsRequestedHandler)
+        view.subscribeWhenPauseIsRequested(this.onStopIsRequestedHandler)
+        view.subscribeWhenResetIsRequested(this.onResetIsRequestedHandler)
         view.subscribeWhenSettingsIsRequested(this.onSettingsIsRequestedHandler)
         view.subscribeWhenApplyTimeIsRequested(this.onApplyTimeIsRequestedHandler)
         view.subscribeWhenVolumeIsChanged(this.onVolumeIsChangedHandler)
-        service.subscribeWhenTimerIsUpdated(this.onTimerIsUpdatedHandler);
-        sound.subscribeWhenSoundEnds(this.onSoundEndsHandler);
-        view.hideSettings();
-
-        this.view.showProgression(100);
-        this.sound.setVolume(0.25);
-        this.service.joinTimer(this.view.getTimerId());
+        view.hideSettings()
+        view.showProgression(100);
+        service.subscribeWhenTimerIsUpdated(this.onTimerIsUpdatedHandler)
+        service.joinTimer(view.getTimerId());
+        sound.subscribeWhenSoundEnds(this.onSoundEndsHandler)
+        sound.setVolume(0.25);
     }
 
     private onStartIsRequestedHandler = (): void => {
@@ -48,10 +46,6 @@ export class Presenter {
         }
     };
 
-    private onChangeThemeIsRequestedHandler = (): void => {
-        this.view.changeTheme();
-    };
-
     private onSettingsIsRequestedHandler = (): void => {
         if(this.isShowSettings){
             this.isShowSettings = false;
@@ -75,4 +69,12 @@ export class Presenter {
     private onSoundEndsHandler = (): void => {
         this.service.reset(this.view.getTimerId());
     };
+
+    public show(): void {
+        throw new Error("Method not implemented.");
+    }
+
+    public hide(): void {
+        throw new Error("Method not implemented.");
+    }
 }
