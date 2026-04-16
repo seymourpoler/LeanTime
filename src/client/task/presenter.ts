@@ -8,7 +8,7 @@ export class Presenter {
   ) {}
 
   public show(): void {
-    throw new Error("Not implemented");
+    this.view.show();
   }
 
   public hide(): void {

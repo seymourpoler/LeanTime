@@ -4,20 +4,25 @@ import { Service } from "./service.js";
 import { View } from "./view.js";
 import { spyAllMethodsOf } from "../../testing.js";
 
-describe('Presenter', () => {
-    let presenter: Presenter;
-    let view: View;
-    let service: Service;
+describe("Presenter", () => {
+  let presenter: Presenter;
+  let view: View;
+  let service: Service;
 
-    beforeEach(() => {
-        view = new View();
-        spyAllMethodsOf(view);
-        service = new Service();
-        spyAllMethodsOf(service);
+  beforeEach(() => {
+    view = new View();
+    spyAllMethodsOf(view);
+    service = new Service();
+    spyAllMethodsOf(service);
 
-        presenter = new Presenter(view, service);
-    })
+    presenter = new Presenter(view, service);
+  });
 
-    it('should be defined', () => {
+  describe("When showing is requested", () => {
+    it("shows", () => {
+      presenter.show();
+
+      expect(view.show).toHaveBeenCalled();
     });
+  });
 });

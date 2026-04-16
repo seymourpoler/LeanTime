@@ -30,8 +30,4 @@ export class Presenter {
     this.timerPresenter.show();
     this.taskPresenter.hide();
   };
-
-  public show(): void {
-    throw new Error("Method not implemented.");
-  }
 }

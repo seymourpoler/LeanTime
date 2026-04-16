@@ -11,7 +11,7 @@ export class View {
 
   public subscribeWhenShowTasksIsRequested(handler: () => void): void {
     document
-      .getElementById("show-tasks")
+      .getElementById("tab-tasks")
       ?.addEventListener("click", (event: Event) => {
         event.preventDefault();
 
@@ -21,7 +21,7 @@ export class View {
 
   public subscribeWhenShowTimerIsRequested(handler: () => void): void {
     document
-      .getElementById("show-timer")
+      .getElementById("tab-timer")
       ?.addEventListener("click", (event: Event) => {
         event.preventDefault();
 
