@@ -25,4 +25,12 @@ describe("Presenter", () => {
       expect(view.show).toHaveBeenCalled();
     });
   });
+
+  describe("When hidding is requested", () => {
+    it("hides", () => {
+      presenter.hide();
+
+      expect(view.hide).toHaveBeenCalled();
+    });
+  });
 });
