@@ -2,7 +2,23 @@ export class View {
   public subscribeWhenAddTaskIsRequested(
     handler: (task: string) => void,
   ): void {
-    throw new Error("Method not implemented.");
+    const button = document.getElementById("add-task");
+    const input = document.getElementById(
+      "task-input",
+    ) as HTMLInputElement | null;
+    if (!button || !input) {
+      return;
+    }
+
+    button.addEventListener("click", (e) => {
+      e.preventDefault();
+      handler(input.value);
+    });
+    // input.addEventListener("keydown", (e) => {
+    //   if (e.key === "Enter") {
+    //     handler(input.value);
+    //   }
+    // });
   }
 
   public show(): void {
