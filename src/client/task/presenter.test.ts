@@ -37,46 +37,25 @@ describe("Presenter", () => {
   });
 
   describe("When adding a task  is requested", () => {
-    it("doesn't add if task is empty", () => {
-      let onAddTaskIsRequestedHandler: any;
-      (view.subscribeWhenAddTaskIsRequested as any).mockImplementation(
-        (handler: any) => {
-          onAddTaskIsRequestedHandler = handler;
-        },
-      );
-      new Presenter(view, service);
+    it.each([
+      ["empty string", ""],
+      ["null", null],
+      ["undefined", undefined],
+    ])(
+      "doesn't add if task is %s",
+      (description: string, value: string | null | undefined) => {
+        let onAddTaskIsRequestedHandler: any;
+        (view.subscribeWhenAddTaskIsRequested as any).mockImplementation(
+          (handler: any) => {
+            onAddTaskIsRequestedHandler = handler;
+          },
+        );
+        new Presenter(view, service);
 
-      onAddTaskIsRequestedHandler("");
+        onAddTaskIsRequestedHandler(value);
 
-      expect(view.showTask).not.toHaveBeenCalled();
-    });
-
-    it("doesn't add if task is null", () => {
-      let onAddTaskIsRequestedHandler: any;
-      (view.subscribeWhenAddTaskIsRequested as any).mockImplementation(
-        (handler: any) => {
-          onAddTaskIsRequestedHandler = handler;
-        },
-      );
-      new Presenter(view, service);
-
-      onAddTaskIsRequestedHandler(null);
-
-      expect(view.showTask).not.toHaveBeenCalled();
-    });
-
-    it("doesn't add if task is undefined", () => {
-      let onAddTaskIsRequestedHandler: any;
-      (view.subscribeWhenAddTaskIsRequested as any).mockImplementation(
-        (handler: any) => {
-          onAddTaskIsRequestedHandler = handler;
-        },
-      );
-      new Presenter(view, service);
-
-      onAddTaskIsRequestedHandler(undefined);
-
-      expect(view.showTask).not.toHaveBeenCalled();
-    });
+        expect(view.showTask).not.toHaveBeenCalled();
+      },
+    );
   });
 });
