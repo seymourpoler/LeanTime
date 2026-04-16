@@ -1,221 +1,262 @@
-import {beforeEach, describe, expect, it, vi} from "vitest";
-import {spyAllMethodsOf} from "../../testing.js";
-import {View} from "./view.js";
-import {Service} from "./service.js";
-import {Presenter} from "./presenter.js";
-import {Sound} from "./sound.js";
-import {Socket} from "socket.io-client";
+import { beforeEach, describe, expect, it, vi } from "vitest";
+import { spyAllMethodsOf } from "../../testing.js";
+import { View } from "./view.js";
+import { Service } from "./service.js";
+import { Presenter } from "./presenter.js";
+import { Sound } from "./sound.js";
+import { Socket } from "socket.io-client";
 
-describe('Presenter', () => {
-    let view : View;
-    let service: Service;
-    let sound: Sound;
-    const socket = {} as Socket;
+describe("Presenter", () => {
+  let view: View;
+  let service: Service;
+  let sound: Sound;
+  const socket = {} as Socket;
 
-    beforeEach(() =>{
-        class MockAudio {
-            play = vi.fn();
-            volume = 1;
-            constructor() {}
-        }
-        // @ts-ignore
-        globalThis.Audio = MockAudio as any;
+  beforeEach(() => {
+    class MockAudio {
+      play = vi.fn();
+      volume = 1;
+      constructor() {}
+    }
+    // @ts-ignore
+    globalThis.Audio = MockAudio as any;
 
-        view = new View();
-        spyAllMethodsOf(view);
-        service = new Service(socket);
-        spyAllMethodsOf(service);
-        sound = new Sound();
-        spyAllMethodsOf(sound);
+    view = new View();
+    spyAllMethodsOf(view);
+    service = new Service(socket);
+    spyAllMethodsOf(service);
+    sound = new Sound();
+    spyAllMethodsOf(sound);
+  });
+
+  describe("When application is loaded", () => {
+    it("start a new room", () => {
+      (view.getTimerId as any).mockReturnValue("test");
+
+      new Presenter(view, service, sound);
+
+      expect(service.joinTimer).toHaveBeenCalledWith("test");
     });
 
-    describe("When application is loaded", () =>{
-        it('start a new room', () =>{
-            (view.getTimerId as any).mockReturnValue("test");
+    it("initializes the progress bar", () => {
+      new Presenter(view, service, sound);
 
-            new Presenter(view, service, sound);
+      expect(view.showProgression).toHaveBeenCalledWith(100);
+    });
 
-            expect(service.joinTimer).toHaveBeenCalledWith("test");
-        });
+    it("initializes the volume to 25%", () => {
+      new Presenter(view, service, sound);
 
-        it('initializes the progress bar', () => {
-            new Presenter(view, service, sound);
+      expect(sound.setVolume).toHaveBeenCalledWith(0.25);
+    });
+  });
 
-            expect(view.showProgression).toHaveBeenCalledWith(100);
-        })
+  describe("when showing is requested", () => {
+    it("shows", () => {
+      const presenter = new Presenter(view, service, sound);
 
-        it('initializes the volume to 25%', () => {
-            new Presenter(view, service, sound);
+      presenter.show();
 
-            expect(sound.setVolume).toHaveBeenCalledWith(0.25);
-        })
-    })
+      expect(view.show).toHaveBeenCalled();
+    });
+  });
 
-    describe("When Start is requested", () => {
-        it('starts', () => {
-            let onStartIsRequestedHandler = () =>{};
-            (view.subscribeWhenStartIsRequested as any).mockImplementation((handler: any) => {
-                onStartIsRequestedHandler = handler;
-            });
-            (view.getTimerId as any).mockReturnValue("test");
-            new Presenter(view, service, sound);
+  describe("when hidding is requested", () => {
+    it("hides", () => {
+      const presenter = new Presenter(view, service, sound);
 
-            onStartIsRequestedHandler();
+      presenter.hide();
 
-            expect(service.start).toHaveBeenCalledWith("test");
-        })
-    })
+      expect(view.hide).toHaveBeenCalled();
+    });
+  });
 
-    describe("When Pause is requested", () => {
-        it('Pauses', () =>{
-            let onPauseIsRequestedHandler = () =>{};
-            (view.subscribeWhenPauseIsRequested as any).mockImplementation((handler: any) => {
-                onPauseIsRequestedHandler = handler;
-            });
-            (view.getTimerId as any).mockReturnValue("test");
-            new Presenter(view, service, sound);
+  describe("When Start is requested", () => {
+    it("starts", () => {
+      let onStartIsRequestedHandler = () => {};
+      (view.subscribeWhenStartIsRequested as any).mockImplementation(
+        (handler: any) => {
+          onStartIsRequestedHandler = handler;
+        },
+      );
+      (view.getTimerId as any).mockReturnValue("test");
+      new Presenter(view, service, sound);
 
-            onPauseIsRequestedHandler();
+      onStartIsRequestedHandler();
 
-            expect(service.pause).toHaveBeenCalledWith("test");
-        });
-    })
+      expect(service.start).toHaveBeenCalledWith("test");
+    });
+  });
 
-    describe("When Reset is requested", () => {
-        it('Resets', () =>{
-            let onResetIsRequestedHandler = () =>{};
-            (view.subscribeWhenResetIsRequested as any).mockImplementation((handler: any) => {
-                onResetIsRequestedHandler = handler;
-            });
-            (view.getTimerId as any).mockReturnValue("test");
-            new Presenter(view, service, sound);
+  describe("When Pause is requested", () => {
+    it("Pauses", () => {
+      let onPauseIsRequestedHandler = () => {};
+      (view.subscribeWhenPauseIsRequested as any).mockImplementation(
+        (handler: any) => {
+          onPauseIsRequestedHandler = handler;
+        },
+      );
+      (view.getTimerId as any).mockReturnValue("test");
+      new Presenter(view, service, sound);
 
-            onResetIsRequestedHandler();
+      onPauseIsRequestedHandler();
 
-            expect(service.reset).toHaveBeenCalledWith("test");
-        });
-    })
+      expect(service.pause).toHaveBeenCalledWith("test");
+    });
+  });
 
-    describe("When Apply time is requested", () => {
-        it('Applies', () =>{
-            let onApplyTimeIsRequestedHandler = (minutes: number, seconds: number) =>{};
-            (view.subscribeWhenApplyTimeIsRequested as any).mockImplementation((handler: any) => {
-                onApplyTimeIsRequestedHandler = handler;
-            });
-            (view.getTimerId as any).mockReturnValue("test");
-            new Presenter(view, service, sound);
+  describe("When Reset is requested", () => {
+    it("Resets", () => {
+      let onResetIsRequestedHandler = () => {};
+      (view.subscribeWhenResetIsRequested as any).mockImplementation(
+        (handler: any) => {
+          onResetIsRequestedHandler = handler;
+        },
+      );
+      (view.getTimerId as any).mockReturnValue("test");
+      new Presenter(view, service, sound);
 
-            onApplyTimeIsRequestedHandler(25, 15);
+      onResetIsRequestedHandler();
 
-            expect(service.applyTime).toHaveBeenCalledWith("test", 1515);
-        })
-    })
+      expect(service.reset).toHaveBeenCalledWith("test");
+    });
+  });
 
-    describe("When time is updated", () => {
-        let onTimerIsUpdatedHandler: any;
+  describe("When Apply time is requested", () => {
+    it("Applies", () => {
+      let onApplyTimeIsRequestedHandler = (
+        minutes: number,
+        seconds: number,
+      ) => {};
+      (view.subscribeWhenApplyTimeIsRequested as any).mockImplementation(
+        (handler: any) => {
+          onApplyTimeIsRequestedHandler = handler;
+        },
+      );
+      (view.getTimerId as any).mockReturnValue("test");
+      new Presenter(view, service, sound);
 
-        beforeEach(() =>{
-            (service.subscribeWhenTimerIsUpdated as any).mockImplementation((handler: any) => {
-                onTimerIsUpdatedHandler = handler;
-            });
-            (view.getTimerId as any).mockReturnValue("test");
-            new Presenter(view, service, sound);
-        })
+      onApplyTimeIsRequestedHandler(25, 15);
 
-        it('shows the time', () => {
-            onTimerIsUpdatedHandler(25, 0);
+      expect(service.applyTime).toHaveBeenCalledWith("test", 1515);
+    });
+  });
 
-            expect(view.showTime).toHaveBeenCalled();
-        })
+  describe("When time is updated", () => {
+    let onTimerIsUpdatedHandler: any;
 
-        it('updates progress bar to 100% when time equals totalSeconds (default 1500)', () => {
-            // 1500 out of 1500 should be 100%
-            onTimerIsUpdatedHandler(1500);
-            expect(view.showProgression).toHaveBeenCalledWith(100);
-        });
+    beforeEach(() => {
+      (service.subscribeWhenTimerIsUpdated as any).mockImplementation(
+        (handler: any) => {
+          onTimerIsUpdatedHandler = handler;
+        },
+      );
+      (view.getTimerId as any).mockReturnValue("test");
+      new Presenter(view, service, sound);
+    });
 
-        it('updates progress bar to ~50% when time equals half totalSeconds (default 750)', () => {
-            onTimerIsUpdatedHandler(750);
-            expect(view.showProgression).toHaveBeenCalledWith(50);
-        });
+    it("shows the time", () => {
+      onTimerIsUpdatedHandler(25, 0);
 
-        it('updates progress bar to 0% when time is 0', () => {
-            onTimerIsUpdatedHandler(0);
-            expect(view.showProgression).toHaveBeenCalledWith(0);
-        });
+      expect(view.showTime).toHaveBeenCalled();
+    });
 
-        it('updates progress bar at an arbitrary value (e.g. 375/1500 = 25%)', () => {
-            onTimerIsUpdatedHandler(375);
-            expect(view.showProgression).toHaveBeenCalledWith(25);
-        });
+    it("updates progress bar to 100% when time equals totalSeconds (default 1500)", () => {
+      // 1500 out of 1500 should be 100%
+      onTimerIsUpdatedHandler(1500);
+      expect(view.showProgression).toHaveBeenCalledWith(100);
+    });
 
-        describe("When the time is up", () => {
-            it('sounds the alarm', () => {
-                onTimerIsUpdatedHandler(0, 0);
+    it("updates progress bar to ~50% when time equals half totalSeconds (default 750)", () => {
+      onTimerIsUpdatedHandler(750);
+      expect(view.showProgression).toHaveBeenCalledWith(50);
+    });
 
-                expect(view.showTime).toHaveBeenCalledWith(0, 0);
-                expect(sound.play).toHaveBeenCalled();
-                expect(service.pause).toHaveBeenCalledWith("test");
-            })
-        })
-    })
+    it("updates progress bar to 0% when time is 0", () => {
+      onTimerIsUpdatedHandler(0);
+      expect(view.showProgression).toHaveBeenCalledWith(0);
+    });
 
-    describe("When showing settings is requested", () => {
-        it('shows settings', () =>{
-            let onSettingsIsRequestedHandler: any;
-            (view.subscribeWhenSettingsIsRequested as any).mockImplementation((handler: any) => {
-                onSettingsIsRequestedHandler = handler;
-            });
-            new Presenter(view, service, sound);
+    it("updates progress bar at an arbitrary value (e.g. 375/1500 = 25%)", () => {
+      onTimerIsUpdatedHandler(375);
+      expect(view.showProgression).toHaveBeenCalledWith(25);
+    });
 
-            onSettingsIsRequestedHandler();
+    describe("When the time is up", () => {
+      it("sounds the alarm", () => {
+        onTimerIsUpdatedHandler(0, 0);
 
-            expect(view.showSettings).toHaveBeenCalled();
-        });
-    })
+        expect(view.showTime).toHaveBeenCalledWith(0, 0);
+        expect(sound.play).toHaveBeenCalled();
+        expect(service.pause).toHaveBeenCalledWith("test");
+      });
+    });
+  });
 
-    describe('when hiding settings is requested', () => {
-        it('hides settings', () =>{
-            let onSettingsIsRequestedHandler: any;
-            (view.subscribeWhenSettingsIsRequested as any).mockImplementation((handler: any) => {
-                onSettingsIsRequestedHandler = handler;
-            });
-            new Presenter(view, service, sound);
+  describe("When showing settings is requested", () => {
+    it("shows settings", () => {
+      let onSettingsIsRequestedHandler: any;
+      (view.subscribeWhenSettingsIsRequested as any).mockImplementation(
+        (handler: any) => {
+          onSettingsIsRequestedHandler = handler;
+        },
+      );
+      new Presenter(view, service, sound);
 
-            onSettingsIsRequestedHandler();
-            onSettingsIsRequestedHandler();
+      onSettingsIsRequestedHandler();
 
-            expect(view.showSettings).toHaveBeenCalled();
-            expect(view.hideSettings).toHaveBeenCalled();
-        })
-    })
+      expect(view.showSettings).toHaveBeenCalled();
+    });
+  });
 
-    describe("When volume is changed", () => {
-        it("delegates the new volume to the sound", () => {
-            let onVolumeIsChangedHandler: (volume: number) => void = () => {};
-            (view.subscribeWhenVolumeIsChanged as any).mockImplementation((handler: any) => {
-                onVolumeIsChangedHandler = handler;
-            });
-            new Presenter(view, service, sound);
+  describe("when hiding settings is requested", () => {
+    it("hides settings", () => {
+      let onSettingsIsRequestedHandler: any;
+      (view.subscribeWhenSettingsIsRequested as any).mockImplementation(
+        (handler: any) => {
+          onSettingsIsRequestedHandler = handler;
+        },
+      );
+      new Presenter(view, service, sound);
 
-            onVolumeIsChangedHandler(0.4);
+      onSettingsIsRequestedHandler();
+      onSettingsIsRequestedHandler();
 
-            expect(sound.setVolume).toHaveBeenCalledWith(0.4);
-        });
-    })
+      expect(view.showSettings).toHaveBeenCalled();
+      expect(view.hideSettings).toHaveBeenCalled();
+    });
+  });
 
-    describe("When sound ends", () => {
-        it("resets the timer so the configured time is shown again", () => {
-            let onSoundEndsHandler: () => void = () => {};
-            (sound.subscribeWhenSoundEnds as any).mockImplementation((handler: any) => {
-                onSoundEndsHandler = handler;
-            });
-            (view.getTimerId as any).mockReturnValue("test");
-            new Presenter(view, service, sound);
+  describe("When volume is changed", () => {
+    it("delegates the new volume to the sound", () => {
+      let onVolumeIsChangedHandler: (volume: number) => void = () => {};
+      (view.subscribeWhenVolumeIsChanged as any).mockImplementation(
+        (handler: any) => {
+          onVolumeIsChangedHandler = handler;
+        },
+      );
+      new Presenter(view, service, sound);
 
-            onSoundEndsHandler();
+      onVolumeIsChangedHandler(0.4);
 
-            expect(service.reset).toHaveBeenCalledWith("test");
-        });
-    })
+      expect(sound.setVolume).toHaveBeenCalledWith(0.4);
+    });
+  });
+
+  describe("When sound ends", () => {
+    it("resets the timer so the configured time is shown again", () => {
+      let onSoundEndsHandler: () => void = () => {};
+      (sound.subscribeWhenSoundEnds as any).mockImplementation(
+        (handler: any) => {
+          onSoundEndsHandler = handler;
+        },
+      );
+      (view.getTimerId as any).mockReturnValue("test");
+      new Presenter(view, service, sound);
+
+      onSoundEndsHandler();
+
+      expect(service.reset).toHaveBeenCalledWith("test");
+    });
+  });
 });
