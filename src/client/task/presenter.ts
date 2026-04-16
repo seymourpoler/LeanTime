@@ -12,6 +12,6 @@ export class Presenter {
   }
 
   public hide(): void {
-    throw new Error("Not implemented");
+    this.view.hide();
   }
 }
