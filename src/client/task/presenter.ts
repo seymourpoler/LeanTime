@@ -1,11 +1,17 @@
-import {View} from "./view.js";
-import {Service} from "./service.js";
+import { View } from "./view.js";
+import { Service } from "./service.js";
 
 export class Presenter {
-    constructor(private readonly view: View, private readonly service: Service) {
-    }
+  constructor(
+    private readonly view: View,
+    private readonly service: Service,
+  ) {}
 
-    public hide() : void {
-        throw new Error('Not implemented');
-    }
+  public show(): void {
+    throw new Error("Not implemented");
+  }
+
+  public hide(): void {
+    throw new Error("Not implemented");
+  }
 }
