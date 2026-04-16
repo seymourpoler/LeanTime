@@ -50,5 +50,33 @@ describe("Presenter", () => {
 
       expect(view.showTask).not.toHaveBeenCalled();
     });
+
+    it("doesn't add if task is null", () => {
+      let onAddTaskIsRequestedHandler: any;
+      (view.subscribeWhenAddTaskIsRequested as any).mockImplementation(
+        (handler: any) => {
+          onAddTaskIsRequestedHandler = handler;
+        },
+      );
+      new Presenter(view, service);
+
+      onAddTaskIsRequestedHandler(null);
+
+      expect(view.showTask).not.toHaveBeenCalled();
+    });
+
+    it("doesn't add if task is undefined", () => {
+      let onAddTaskIsRequestedHandler: any;
+      (view.subscribeWhenAddTaskIsRequested as any).mockImplementation(
+        (handler: any) => {
+          onAddTaskIsRequestedHandler = handler;
+        },
+      );
+      new Presenter(view, service);
+
+      onAddTaskIsRequestedHandler(undefined);
+
+      expect(view.showTask).not.toHaveBeenCalled();
+    });
   });
 });
