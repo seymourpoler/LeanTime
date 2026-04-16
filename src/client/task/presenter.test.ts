@@ -39,11 +39,15 @@ describe("Presenter", () => {
   describe("When adding a task  is requested", () => {
     it.each([
       ["empty string", ""],
+      ["single whitespace", " "],
+      ["multiple whitespaces", "   "],
+      ["tab character", "\t"],
+      ["newline character", "\n"],
       ["null", null],
       ["undefined", undefined],
     ])(
       "doesn't add if task is %s",
-      (description: string, value: string | null | undefined) => {
+      (_description: string, value: string | null | undefined) => {
         let onAddTaskIsRequestedHandler: any;
         (view.subscribeWhenAddTaskIsRequested as any).mockImplementation(
           (handler: any) => {

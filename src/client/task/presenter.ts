@@ -10,7 +10,7 @@ export class Presenter {
   }
 
   private AddTaskIsRequestedHandler(task: string): void {
-    if (!task) {
+    if (!task || !task.trim()) {
       return;
     }
     throw new Error("not implemented");
