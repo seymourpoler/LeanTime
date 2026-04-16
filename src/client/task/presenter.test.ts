@@ -14,12 +14,12 @@ describe("Presenter", () => {
     spyAllMethodsOf(view);
     service = new Service();
     spyAllMethodsOf(service);
-
-    presenter = new Presenter(view, service);
   });
 
   describe("When showing is requested", () => {
     it("shows", () => {
+      const presenter = new Presenter(view, service);
+
       presenter.show();
 
       expect(view.show).toHaveBeenCalled();
@@ -28,9 +28,27 @@ describe("Presenter", () => {
 
   describe("When hidding is requested", () => {
     it("hides", () => {
+      presenter = new Presenter(view, service);
+
       presenter.hide();
 
       expect(view.hide).toHaveBeenCalled();
+    });
+  });
+
+  describe("When adding a task  is requested", () => {
+    it("doesn't add if task is empty", () => {
+      let onAddTaskIsRequestedHandler: any;
+      (view.subscribeWhenAddTaskIsRequested as any).mockImplementation(
+        (handler: any) => {
+          onAddTaskIsRequestedHandler = handler;
+        },
+      );
+      new Presenter(view, service);
+
+      onAddTaskIsRequestedHandler("");
+
+      expect(view.showTask).not.toHaveBeenCalled();
     });
   });
 });

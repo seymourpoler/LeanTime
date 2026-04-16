@@ -1,4 +1,10 @@
 export class View {
+  public subscribeWhenAddTaskIsRequested(
+    handler: (task: string) => void,
+  ): void {
+    throw new Error("Method not implemented.");
+  }
+
   public show(): void {
     const tab = document.getElementById("tab-tasks");
     const panel = document.getElementById("panel-tasks");
@@ -21,5 +27,9 @@ export class View {
     tab.classList.remove("active");
     tab.setAttribute("aria-selected", "false");
     panel.style.display = "none";
+  }
+
+  public showTask(tasks: string[]): void {
+    throw new Error("Method not implemented.");
   }
 }
