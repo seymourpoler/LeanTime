@@ -5,15 +5,14 @@
     "target": "ES2020",
     "esModuleInterop": true,
     "module": "NodeNext",
-    "moduleResolution": "NodeNext"
+    "moduleResolution": "NodeNext",
   },
-  "include": [
-    "src/**/*"
-  ],
+  "include": ["src/**/*", "src/**/**/*"],
   "exclude": [
     "node_modules",
     "vite.config.ts",
     "src/testing.ts",
-    "**/*.test.ts"
-  ]
+    "**/*.test.ts",
+    "**/**/*.test.ts",
+  ],
 }

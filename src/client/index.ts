@@ -4,10 +4,24 @@ import { Presenter as TimerPresenter } from "./timer/presenter.js";
 import { Sound } from "./timer/sound.js";
 import { io } from "socket.io-client";
 
+import { View as TaskView } from "./task/view.js";
+import { Presenter as TaskPresenter } from "./task/presenter.js";
+import { Service as TaskService } from "./task/service.js";
+
+import { View } from "./view.js";
+import { Presenter } from "./presenter.js";
+
 const sound = new Sound();
 const timerService = new TimerService(io());
 const timerView = new TimerView();
-new TimerPresenter(timerView, timerService, sound);
+const timerPresenter = new TimerPresenter(timerView, timerService, sound);
+
+const taskService = new TaskService();
+const taskView = new TaskView();
+const taskPresenter = new TaskPresenter(taskView, taskService);
+
+const view = new View();
+new Presenter(view, timerPresenter, taskPresenter);
 
 // Tabs logic
 const tabTimer = document.getElementById("tab-timer");
