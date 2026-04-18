@@ -121,6 +121,6 @@ export class View {
         const path = window.location.pathname;
         const timerId = path.replace("/", "");
 
-        return timerId || "default";
+        return timerId || crypto.randomUUID();
     }
 }
