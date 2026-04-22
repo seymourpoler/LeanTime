@@ -10,6 +10,7 @@ import { Service as TaskService } from "./task/service.js";
 
 import { View } from "./view.js";
 import { Presenter } from "./presenter.js";
+import { IdGenerator } from "./task/idGenerator.js";
 
 const sound = new Sound();
 const timerService = new TimerService(io());
@@ -18,7 +19,8 @@ const timerPresenter = new TimerPresenter(timerView, timerService, sound);
 
 const taskService = new TaskService();
 const taskView = new TaskView();
-const taskPresenter = new TaskPresenter(taskView, taskService);
+const idGenerator = new IdGenerator();
+const taskPresenter = new TaskPresenter(taskView, taskService, idGenerator);
 
 const view = new View();
 new Presenter(view, timerPresenter, taskPresenter);

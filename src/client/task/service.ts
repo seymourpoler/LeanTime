@@ -1,5 +1,6 @@
+import { Task } from "./task.js";
+
 export class Service {
-  public addTask(tasks: string[]): void {
-    throw new Error("Task not implemented");
-  }
+  public addTask(tasks: Task[]): void {}
+  public removeTask(taskId: string): void {}
 }
