@@ -18,6 +18,7 @@ export class Presenter {
     }
 
     this.tasks.push(task);
+    this.service.addTask(this.tasks);
     this.view.showTask(this.tasks);
   };
 

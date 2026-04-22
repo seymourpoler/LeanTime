@@ -61,6 +61,7 @@ describe("Presenter", () => {
         expect(view.showTask).not.toHaveBeenCalled();
       },
     );
+
     it("add new task", () => {
       let onAddTaskIsRequestedHandler: any;
       (view.subscribeWhenAddTaskIsRequested as any).mockImplementation(
@@ -73,6 +74,7 @@ describe("Presenter", () => {
       onAddTaskIsRequestedHandler("a-simple-task");
 
       expect(view.showTask).toHaveBeenCalledWith(["a-simple-task"]);
+      expect(service.addTask).toHaveBeenCalledWith(["a-simple-task"]);
     });
   });
 });
