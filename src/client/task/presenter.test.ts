@@ -61,5 +61,18 @@ describe("Presenter", () => {
         expect(view.showTask).not.toHaveBeenCalled();
       },
     );
+    it("add new task", () => {
+      let onAddTaskIsRequestedHandler: any;
+      (view.subscribeWhenAddTaskIsRequested as any).mockImplementation(
+        (handler: any) => {
+          onAddTaskIsRequestedHandler = handler;
+        },
+      );
+      new Presenter(view, service);
+
+      onAddTaskIsRequestedHandler("a-simple-task");
+
+      expect(view.showTask).toHaveBeenCalledWith(["a-simple-task"]);
+    });
   });
 });
