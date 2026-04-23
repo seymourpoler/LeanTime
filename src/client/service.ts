@@ -24,6 +24,12 @@ export class Service {
         });
     }
 
+    public subscribeWhenSettingsAreUpdated(handler:(time: number)=>void) : void {
+        this.socket.on('settings_updated', (time:number) => {
+            handler(time);
+        });
+    }
+
     public pause(timerId: string) : void {
         this.socket.emit('pause_timer',{
             sender: this.socket.id || "Anonymous",

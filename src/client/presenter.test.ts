@@ -96,21 +96,6 @@ describe('Presenter', () => {
         });
     })
 
-    describe("When Apply time is requested", () => {
-        it('Applies', () =>{
-            let onApplyTimeIsRequestedHandler = (minutes: number, seconds: number) =>{};
-            (view.subscribeWhenApplyTimeIsRequested as any).mockImplementation((handler: any) => {
-                onApplyTimeIsRequestedHandler = handler;
-            });
-            (view.getTimerId as any).mockReturnValue("test");
-            new Presenter(view, service, sound);
-
-            onApplyTimeIsRequestedHandler(25, 15);
-
-            expect(service.applyTime).toHaveBeenCalledWith("test", 1515);
-        })
-    })
-
     describe("When time is updated", () => {
         let onTimerIsUpdatedHandler: any;
 
@@ -204,6 +189,40 @@ describe('Presenter', () => {
 
                 expect(view.showSettings).toHaveBeenCalled();
                 expect(view.hideSettings).toHaveBeenCalled();
+            })
+        })
+
+        describe("When Apply time is requested", () => {
+            it('Applies', () =>{
+                let onApplyTimeIsRequestedHandler = (minutes: number, seconds: number) =>{};
+                (view.subscribeWhenApplyTimeIsRequested as any).mockImplementation((handler: any) => {
+                    onApplyTimeIsRequestedHandler = handler;
+                });
+                (view.getTimerId as any).mockReturnValue("test");
+                new Presenter(view, service, sound);
+
+                onApplyTimeIsRequestedHandler(25, 15);
+
+                expect(service.applyTime).toHaveBeenCalledWith("test", 1515);
+            })
+        })
+
+        describe("When settings are updated", () => {
+            let onSettingsAreUpdatedHandler: any;
+
+            beforeEach(() => {
+                (service.subscribeWhenSettingsAreUpdated as any).mockImplementation((handler: any) => {
+                    onSettingsAreUpdatedHandler = handler;
+                });
+                (view.getTimerId as any).mockReturnValue("test");
+                new Presenter(view, service, sound);
+            })
+
+            it('shows the settings', () => {
+                onSettingsAreUpdatedHandler(25, 0);
+
+                expect(view.showTime).toHaveBeenCalled();
+                expect(view.updateSettings).toHaveBeenCalled();
             })
         })
     })

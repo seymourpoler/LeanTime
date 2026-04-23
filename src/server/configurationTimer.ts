@@ -86,8 +86,10 @@ export class ConfigurationTimer {
         };
         if(seconds < 0){
             this.serverToClient.timerUpdated(timerId, 0);
+            this.serverToClient.settingsUpdated(timerId, 0);
             return;
         }
         this.serverToClient.timerUpdated(timerId, seconds);
+        this.serverToClient.settingsUpdated(timerId, seconds);
     }
 }

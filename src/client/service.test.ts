@@ -38,6 +38,15 @@ describe('Service', () => {
         expect(handler).toHaveBeenCalledWith(42);
     });
 
+    it('subscribeWhenSettingsAreUpdated registers handler for settings_updated', () => {
+        const handler = vi.fn();
+        socket.on.mockImplementation((_event: string, cb: Function) => cb(42));
+
+        service.subscribeWhenSettingsAreUpdated(handler);
+
+        expect(handler).toHaveBeenCalledWith(42);
+    })
+
     it('pause emits pause_timer with sender and timerId', () => {
         service.pause('a-timer');
 

@@ -15,6 +15,7 @@ export class Presenter {
         view.subscribeWhenApplyTimeIsRequested(this.onApplyTimeIsRequestedHandler)
         view.subscribeWhenVolumeIsChanged(this.onVolumeIsChangedHandler)
         service.subscribeWhenTimerIsUpdated(this.onTimerIsUpdatedHandler);
+        service.subscribeWhenSettingsAreUpdated(this.onSettingsAreUpdatedHandler);
         sound.subscribeWhenSoundEnds(this.onSoundEndsHandler);
         view.hideSettings();
 
@@ -47,6 +48,13 @@ export class Presenter {
             return;
         }
     };
+
+    private onSettingsAreUpdatedHandler = (time: number): void => {
+        const minutes = Math.floor(time / 60);
+        const seconds = time - minutes * 60;
+        this.view.showTime(minutes, seconds);
+        this.view.updateSettings(minutes, seconds);
+    }
 
     private onChangeThemeIsRequestedHandler = (): void => {
         this.view.changeTheme();

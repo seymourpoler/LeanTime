@@ -1,14 +1,17 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import { ConfigurationTimer } from './configurationTimer.js';
+import { ServerToClient } from "./serverToClient.js";
+import { spyAllMethodsOf} from "../testing.js";
 
 describe('ConfigurationTimer', () => {
     let timer: ConfigurationTimer;
-    const serverToClient = { timerUpdated: vi.fn() } as any;
+    let serverToClient: ServerToClient;
     const timerId = 'timer1';
 
     beforeEach(() => {
+        serverToClient = new ServerToClient({} as any);
+        spyAllMethodsOf(serverToClient);
         timer = new ConfigurationTimer(serverToClient);
-        serverToClient.timerUpdated.mockClear();
     });
 
     it('pause stops the timer and clears interval', () => {
@@ -21,6 +24,7 @@ describe('ConfigurationTimer', () => {
         timer.apply(timerId, 42);
 
         expect(serverToClient.timerUpdated).toHaveBeenCalledWith(timerId, 42);
+        expect(serverToClient.settingsUpdated).toHaveBeenCalledWith(timerId, 42);
     });
 
     it('start initializes timer if not present and but not starting interval', () => {
@@ -71,10 +75,9 @@ describe('ConfigurationTimer', () => {
         timer.apply(timerId, 3);
 
         timer.start(timerId);
-        vi.advanceTimersByTime(3000);   // timer reaches 0 and stops
-        serverToClient.timerUpdated.mockClear();
+        vi.advanceTimersByTime(3000);
 
-        timer.start(timerId);           // user hits play again — must restart from 3, not go to -1
+        timer.start(timerId);
         vi.advanceTimersByTime(1000);
 
         expect(serverToClient.timerUpdated).toHaveBeenCalledWith(timerId, 2);
@@ -91,14 +94,17 @@ describe('ConfigurationTimer', () => {
         timer.apply(timerId, 0);
 
         expect(serverToClient.timerUpdated).toHaveBeenCalledWith(timerId, 0);
+        expect(serverToClient.settingsUpdated).toHaveBeenCalledWith(timerId, 0);
     });
 
     it('start, pause, then start again resumes timer', () => {
         vi.useFakeTimers();
         timer.apply(timerId, 3);
         timer.start(timerId);
+
         vi.advanceTimersByTime(1000);
         timer.pause(timerId);
+
         vi.advanceTimersByTime(2000);
         timer.start(timerId);
         vi.advanceTimersByTime(1000);
@@ -118,7 +124,9 @@ describe('ConfigurationTimer', () => {
 
     it('reset sets timer to configurationTime', () => {
         timer.apply(timerId, 7);
+
         timer.reset(timerId);
+
         expect(serverToClient.timerUpdated).toHaveBeenCalledWith(timerId, 7);
     });
 
