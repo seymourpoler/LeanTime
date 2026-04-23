@@ -26,8 +26,7 @@ export class Presenter {
       return;
     }
 
-    const newTask: Task = { id: this.idGenerator.generate(), title: task };
-    this.tasks.push(newTask);
+    this.tasks.push({ id: this.idGenerator.generate(), title: task });
     this.service.addTask(this.tasks);
     this.view.showTask(this.tasks);
   };
