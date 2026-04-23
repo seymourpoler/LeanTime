@@ -6,17 +6,18 @@ export class View {
   public subscribeWhenAddTaskIsRequested(
     handler: (task: string) => void,
   ): void {
-    const button = document.getElementById("add-task");
-    const input = document.getElementById(
+    const btnAdd = document.getElementById("add-task");
+    const taskTitle = document.getElementById(
       "task-input",
     ) as HTMLInputElement | null;
-    if (!button || !input) {
+    if (!btnAdd || !taskTitle) {
       return;
     }
 
-    button.addEventListener("click", (e) => {
+    btnAdd.addEventListener("click", (e) => {
       e.preventDefault();
-      handler(input.value);
+      handler(taskTitle.value);
+      taskTitle.value = "";
     });
     // input.addEventListener("keydown", (e) => {
     //   if (e.key === "Enter") {
@@ -68,29 +69,27 @@ export class View {
     }
   }
 
-  private renderTask(id: string, text: string) {
-    const li = document.createElement("li");
-    li.textContent = text;
-    li.id = id;
-    li.classList.remove("done");
-    // Click/tap to cross off
-    li.addEventListener("click", (e) => {
-      // Don’t toggle if Remove btn is clicked
-      if ((e.target as HTMLElement).classList.contains("remove-task-btn"))
+  private renderTask(id: string, text: string): HTMLLIElement {
+    const list = document.createElement("li");
+    list.textContent = text;
+    list.id = id;
+    list.classList.remove("done");
+    list.addEventListener("click", (event) => {
+      if ((event.target as HTMLElement).classList.contains("remove-task-btn"))
         return;
-      li.classList.toggle("done");
+      list.classList.toggle("done");
     });
-    // Remove button
-    const btn = document.createElement("button");
-    btn.type = "button";
-    btn.textContent = "✕";
-    btn.className = "remove-task-btn";
-    btn.title = "Remove task";
-    btn.addEventListener("click", (e) => {
+
+    const btnRemove = document.createElement("button");
+    btnRemove.type = "button";
+    btnRemove.textContent = "✕";
+    btnRemove.className = "remove-task-btn";
+    btnRemove.title = "Remove task";
+    btnRemove.addEventListener("click", (e) => {
       e.stopPropagation();
       this.removeTaskHandler?.(id);
     });
-    li.appendChild(btn);
-    return li;
+    list.appendChild(btnRemove);
+    return list;
   }
 }
