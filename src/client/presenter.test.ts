@@ -128,27 +128,6 @@ describe('Presenter', () => {
             expect(view.showTime).toHaveBeenCalled();
         })
 
-        it('updates progress bar to 100% when time equals totalSeconds (default 1500)', () => {
-            // 1500 out of 1500 should be 100%
-            onTimerIsUpdatedHandler(1500);
-            expect(view.showProgression).toHaveBeenCalledWith(100);
-        });
-
-        it('updates progress bar to ~50% when time equals half totalSeconds (default 750)', () => {
-            onTimerIsUpdatedHandler(750);
-            expect(view.showProgression).toHaveBeenCalledWith(50);
-        });
-
-        it('updates progress bar to 0% when time is 0', () => {
-            onTimerIsUpdatedHandler(0);
-            expect(view.showProgression).toHaveBeenCalledWith(0);
-        });
-
-        it('updates progress bar at an arbitrary value (e.g. 375/1500 = 25%)', () => {
-            onTimerIsUpdatedHandler(375);
-            expect(view.showProgression).toHaveBeenCalledWith(25);
-        });
-
         describe("When the time is up", () => {
             it('sounds the alarm', () => {
                 onTimerIsUpdatedHandler(0, 0);
@@ -157,6 +136,29 @@ describe('Presenter', () => {
                 expect(sound.play).toHaveBeenCalled();
                 expect(service.pause).toHaveBeenCalledWith("test");
             })
+        })
+
+        describe("Progress bar", () => {
+            it('updates progress bar to 100% when time equals totalSeconds (default 1500)', () => {
+                // 1500 out of 1500 should be 100%
+                onTimerIsUpdatedHandler(1500);
+                expect(view.showProgression).toHaveBeenCalledWith(100);
+            });
+
+            it('updates progress bar to ~50% when time equals half totalSeconds (default 750)', () => {
+                onTimerIsUpdatedHandler(750);
+                expect(view.showProgression).toHaveBeenCalledWith(50);
+            });
+
+            it('updates progress bar to 0% when time is 0', () => {
+                onTimerIsUpdatedHandler(0);
+                expect(view.showProgression).toHaveBeenCalledWith(0);
+            });
+
+            it('updates progress bar at an arbitrary value (e.g. 375/1500 = 25%)', () => {
+                onTimerIsUpdatedHandler(375);
+                expect(view.showProgression).toHaveBeenCalledWith(25);
+            });
         })
     })
 
@@ -174,33 +176,35 @@ describe('Presenter', () => {
         })
     })
 
-    describe("When showing settings is requested", () => {
-        it('shows settings', () =>{
-            let onSettingsIsRequestedHandler: any;
-            (view.subscribeWhenSettingsIsRequested as any).mockImplementation((handler: any) => {
-                onSettingsIsRequestedHandler = handler;
+    describe('Settings', () =>{
+        describe("When showing settings is requested", () => {
+            it('shows settings', () =>{
+                let onSettingsIsRequestedHandler: any;
+                (view.subscribeWhenSettingsIsRequested as any).mockImplementation((handler: any) => {
+                    onSettingsIsRequestedHandler = handler;
+                });
+                new Presenter(view, service, sound);
+
+                onSettingsIsRequestedHandler();
+
+                expect(view.showSettings).toHaveBeenCalled();
             });
-            new Presenter(view, service, sound);
+        })
 
-            onSettingsIsRequestedHandler();
+        describe('when hiding settings is requested', () => {
+            it('hides settings', () =>{
+                let onSettingsIsRequestedHandler: any;
+                (view.subscribeWhenSettingsIsRequested as any).mockImplementation((handler: any) => {
+                    onSettingsIsRequestedHandler = handler;
+                });
+                new Presenter(view, service, sound);
 
-            expect(view.showSettings).toHaveBeenCalled();
-        });
-    })
+                onSettingsIsRequestedHandler();
+                onSettingsIsRequestedHandler();
 
-    describe('when hiding settings is requested', () => {
-        it('hides settings', () =>{
-            let onSettingsIsRequestedHandler: any;
-            (view.subscribeWhenSettingsIsRequested as any).mockImplementation((handler: any) => {
-                onSettingsIsRequestedHandler = handler;
-            });
-            new Presenter(view, service, sound);
-
-            onSettingsIsRequestedHandler();
-            onSettingsIsRequestedHandler();
-
-            expect(view.showSettings).toHaveBeenCalled();
-            expect(view.hideSettings).toHaveBeenCalled();
+                expect(view.showSettings).toHaveBeenCalled();
+                expect(view.hideSettings).toHaveBeenCalled();
+            })
         })
     })
 
