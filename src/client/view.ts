@@ -102,6 +102,18 @@ export class View {
         }
     }
 
+    public updateSettings(minutes: number, seconds: number) : void {
+        const configMinutes = document.getElementById('config-minutes') as HTMLInputElement;
+        if(configMinutes) {
+            configMinutes.value = minutes.toString();
+        }
+
+        const configSeconds = document.getElementById('config-seconds') as HTMLInputElement;
+        if(configSeconds) {
+            configSeconds.value = seconds.toString();
+        }
+    }
+
     public showSettings() : void {
         this.settings('block');
     }
@@ -121,6 +133,6 @@ export class View {
         const path = window.location.pathname;
         const timerId = path.replace("/", "");
 
-        return timerId || crypto.randomUUID();
+        return timerId || "default";
     }
 }

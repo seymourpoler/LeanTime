@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from "vitest";
-import { View } from "./view";
+import { View } from "./view.js";
 
 describe("View", () => {
   describe("When getting timer id", () => {
@@ -24,24 +24,14 @@ describe("View", () => {
     });
 
     describe("From root path", () => {
-      it("generates some ID", () => {
+      it("returns timerId", () => {
         vi.stubGlobal("location", { pathname: "/" });
 
         const view = new View();
         const timerId = view.getTimerId();
 
         expect(timerId.length).toBeGreaterThan(0);
-        expect(timerId).not.toBe("/");
-      });
-
-      it("generates unique IDs on subsequent calls", () => {
-        vi.stubGlobal("location", { pathname: "/" });
-
-        const view = new View();
-        const timerId1 = view.getTimerId();
-        const timerId2 = view.getTimerId();
-
-        expect(timerId1).not.toBe(timerId2);
+        expect(timerId).toBe("default");
       });
     });
   });

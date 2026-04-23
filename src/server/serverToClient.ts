@@ -1,4 +1,4 @@
-import {Server} from "socket.io";
+import { Server } from "socket.io";
 
 export class ServerToClient {
     private readonly io: Server;
@@ -9,6 +9,10 @@ export class ServerToClient {
 
     public timerUpdated(roomId: string, timeLeft: number) : void {
         this.io.to(roomId).emit("timer_updated", timeLeft);
+    }
+
+    public settingsUpdated(roomId: string, time: number) : void {
+        this.io.to(roomId).emit("settings_updated", time);
     }
 }
 
