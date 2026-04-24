@@ -15,7 +15,15 @@ Consult the appropriate file for detailed info on:
 - Change checklists
 
 
-For any changes to event contracts, API endpoints, or cross-boundary protocols, **always update both client and server docs**.
+
+**Important protocol note:**
+- The timer system now supports multiple independent timers (rooms) via `timerId`. All timer actions and updates are scoped to a specific timer room.
+- Socket event names have changed. The current contract uses:
+  - Client → Server: `join_timer`, `leave_timer`, `start_timer`, `pause_timer`, `reset_timer`, `apply_timer`
+  - Server → Client: `timer_updated`
+- If you change any event names, timer ID logic, or cross-boundary protocol, **always update both client and server docs** to keep contracts in sync.
+
+For details/examples, see `src/client/service.ts` and `src/server/index.ts`.
 
 For supporting architectural and workflow documentation (e.g., MVP, TDD, overview), see the `doc/` folder in the project root.
 
