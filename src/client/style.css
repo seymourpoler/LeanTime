@@ -12,10 +12,15 @@ body {
     background-color: var(--bg-color);
     color: var(--text);
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
-    height: 100vh;
+    min-height: 100vh;
     margin: 0;
+    padding: 1rem;
+    box-sizing: border-box;
+    position: relative;
+    transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 .container {
@@ -24,7 +29,9 @@ body {
     border-radius: 20px;
     box-shadow: 0 10px 25px rgba(0,0,0,0.1);
     text-align: center;
-    width: 320px;
+    max-width: 360px;
+    width: 100%;
+    box-sizing: border-box;
     margin: auto;
     transition: background-color 0.3s ease;
 }
@@ -89,16 +96,6 @@ button:hover {
     opacity: 0.9;
 }
 
-body {
-    display: flex;
-    flex-direction: column;
-    min-height: 100vh;
-    margin: 0;
-    background-color: var(--bg-color);
-    color: var(--text);
-    transition: background-color 0.3s ease, color 0.3s ease;
-}
-
 body.dark {
     --bg-color: #0f172a;
     --card-bg: #1e293b;
@@ -106,6 +103,19 @@ body.dark {
     --danger: #f87171;
     --text: #f8fafc;
     --footer-text: #94a3b8;
+}
+
+#theme-toggle {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background: transparent;
+    border: none;
+    font-size: 1.25rem;
+    cursor: pointer;
+    padding: 8px;
+    border-radius: 8px;
+    line-height: 1;
 }
 
 .app-footer {
@@ -138,21 +148,6 @@ body.dark {
 .github-link svg {
     width: 28px;
     height: 28px;
-}
-
-.app-footer {
-    padding: 20px;
-    text-align: center;
-    font-size: 0.9rem;
-    color: #6b7280; /* Subtle gray */
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 8px;
-}
-
-.app-footer p {
-    margin: 0;
 }
 
 .config-section {
