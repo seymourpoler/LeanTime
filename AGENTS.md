@@ -15,7 +15,6 @@ Consult the appropriate file for detailed info on:
 - Change checklists
 
 
-
 **Important protocol note:**
 - The timer system now supports multiple independent timers (rooms) via `timerId`. All timer actions and updates are scoped to a specific timer room.
 - Socket event names have changed. The current contract uses:
