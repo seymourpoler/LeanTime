@@ -12,7 +12,7 @@ export class Service {
     }
 
     public start(timerId: string) : void {
-        this.socket.emit('start_timer',{
+        this.socket.emit('start_timer', {
             sender: this.socket.id || "Anonymous",
             timerId: timerId
         });
@@ -31,14 +31,14 @@ export class Service {
     }
 
     public pause(timerId: string) : void {
-        this.socket.emit('pause_timer',{
+        this.socket.emit('pause_timer', {
             sender: this.socket.id || "Anonymous",
             timerId: timerId
         });
     }
 
     public reset(timerId: string) : void {
-        this.socket.emit('reset_timer',{
+        this.socket.emit('reset_timer', {
             sender: this.socket.id || "Anonymous",
             timerId: timerId
         });
