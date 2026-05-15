@@ -64,9 +64,13 @@ async function bootstrap() {
       configurationTimer.reset(args.timerId);
     });
 
-    socket.on(
-      "apply_timer",
-      (args: { sender: string; timerId: string; seconds: number }) => {
+    type ApplyTimerArgs = {
+      sender: string;
+      timerId: string;
+      seconds: number;
+    };
+
+    socket.on("apply_timer", (args: ApplyTimerArgs) => {
         console.log(
           `User reset: ${args.sender} in timer ${args.timerId} with time ${args.seconds}`,
         );
