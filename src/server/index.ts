@@ -46,7 +46,6 @@ async function bootstrap() {
       sender: string;
       timerId: string
     };
-
     socket.on("pause_timer", (args: PauseTimerArgs) => {
       console.log(`User paused: ${args.sender} in timer ${args.timerId}`);
 
@@ -57,7 +56,6 @@ async function bootstrap() {
       sender: string;
       timerId: string;
     };
-
     socket.on("reset_timer", (args: ResetTimerArgs) => {
       console.log(`User reset: ${args.sender} in timer ${args.timerId}`);
 
@@ -69,7 +67,6 @@ async function bootstrap() {
       timerId: string;
       seconds: number;
     };
-
     socket.on("apply_timer", (args: ApplyTimerArgs) => {
         console.log(
           `User reset: ${args.sender} in timer ${args.timerId} with time ${args.seconds}`,
