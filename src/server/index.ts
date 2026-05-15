@@ -32,31 +32,42 @@ async function bootstrap() {
       socket.leave(timerId);
     });
 
-    // type StartTimerArgs = {
-    //     sender: string;
-    //     roomId: string;
-    // };
-    socket.on("start_timer", (args: { sender: string; timerId: string }) => {
+    type StartTimerArgs = {
+        sender: string;
+        timerId: string;
+    };
+    socket.on("start_timer", (args: StartTimerArgs) => {
       console.log(`User started: ${args.sender} in timer ${args.timerId}`);
 
       configurationTimer.start(args.timerId);
     });
 
-    socket.on("pause_timer", (args: { sender: string; timerId: string }) => {
+    type PauseTimerArgs = {
+      sender: string;
+      timerId: string
+    };
+    socket.on("pause_timer", (args: PauseTimerArgs) => {
       console.log(`User paused: ${args.sender} in timer ${args.timerId}`);
 
       configurationTimer.pause(args.timerId);
     });
 
-    socket.on("reset_timer", (args: { sender: string; timerId: string }) => {
+    type ResetTimerArgs = {
+      sender: string;
+      timerId: string;
+    };
+    socket.on("reset_timer", (args: ResetTimerArgs) => {
       console.log(`User reset: ${args.sender} in timer ${args.timerId}`);
 
       configurationTimer.reset(args.timerId);
     });
 
-    socket.on(
-      "apply_timer",
-      (args: { sender: string; timerId: string; seconds: number }) => {
+    type ApplyTimerArgs = {
+      sender: string;
+      timerId: string;
+      seconds: number;
+    };
+    socket.on("apply_timer", (args: ApplyTimerArgs) => {
         console.log(
           `User reset: ${args.sender} in timer ${args.timerId} with time ${args.seconds}`,
         );
