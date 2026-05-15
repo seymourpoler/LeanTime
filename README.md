@@ -6,10 +6,24 @@ LeanTime is a lightweight and minimalistic countdown timer web app. Designed for
 
 ---
 
+## 📖 Documentation
+LeanTime’s documentation is structured to help you quickly find what you need, whether you’re a user, developer, or contributor:
+
+- **[Documentation Overview](./doc/documentation_overview.md)** — The canonical map of all project docs, update protocols, and contribution guidelines.
+- **[Client AGENTS.md](./src/client/AGENTS.md)** — Frontend architecture, UI patterns, and internal conventions.
+- **[Server AGENTS.md](./src/server/AGENTS.md)** — Backend (server/API/timer) architecture, contracts, and best practices.
+- **[Code of Conduct](./CODE_OF_CONDUCT.md)** — Collaboration norms and community rules.
+- **[License](./LICENSE.md)** — MIT License.
+
+👉 If you update features, protocols, or cross the client/server boundary, always reference the documentation overview and relevant AGENTS.md for required doc changes.
+
+---
+
 ## Table of Contents
 
 - [Features](#features)
 - [Tech Stack](#tech-stack)
+- [Documentation](#documentation)
 - [Getting Started](#getting-started)
   - [Prerequisites](#prerequisites)
   - [Installation](#installation)
@@ -114,12 +128,14 @@ LeanTime is currently deployed on [Render](https://leantime-bfz4.onrender.com/).
 
 ## Contributing
 
-Contributions are welcome! Please adhere to our [Code of Conduct](./CODE_OF_CONDUCT.md).
+Contributions are welcome! Please read the [Code of Conduct](./CODE_OF_CONDUCT.md) and review the [Documentation Overview](./doc/documentation_overview.md) for workflow, checklist, and file update requirements.
 
 To get started:
 - Fork this repository.
 - Create a new branch.
 - Submit a pull request with a clear explanation of changes.
+
+If you change protocols or cross client/server boundaries, update AGENTS.md and the documentation overview accordingly and ensure all affected tests pass.
 
 ---
 
