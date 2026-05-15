@@ -21,6 +21,7 @@
   },
   "dependencies": {
     "express": "^5.2.1",
+    "npm": "^11.14.1",
     "socket.io": "^4.8.1",
     "socket.io-client": "^4.7.4",
     "vite": "^8.0.0"
