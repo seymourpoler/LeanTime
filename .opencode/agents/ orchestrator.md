@@ -1,7 +1,7 @@
 ---
 name: orchestrator
 description: Coordinates frontend and backend agents to design a system
-model: gpt-5
+model: gpt-4.1 github copilot
 mode: primary
 temperature: 0.2
 ----------------

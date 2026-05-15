@@ -1,7 +1,7 @@
 ---
 name: backend
 description: Designs backend systems, APIs, and database
-model: gpt-5
+model: gpt-4.1 github copilot
 mode: subagent
 temperature: 0.3
 ----------------

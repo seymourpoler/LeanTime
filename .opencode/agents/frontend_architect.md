@@ -1,7 +1,7 @@
 ---
 name: frontend
 description: Designs frontend architecture and UI systems
-model: gpt-5
+model: gpt-4.1 github copilot
 mode: subagent
 temperature: 0.4
 ----------------
