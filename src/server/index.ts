@@ -77,6 +77,7 @@ async function bootstrap() {
     );
   });
 
+  app.use(express.static(path.resolve('dist')));
   if (process.env.NODE_ENV !== "production") {
     // In Dev: Vite handles the frontend requests as middleware
     const vite = await createViteServer({
@@ -89,7 +90,9 @@ async function bootstrap() {
     const distPath = path.resolve(process.cwd(), "dist");
     app.use(express.static(distPath));
   }
-
+  app.get(/(.*)/, (req, res) => {
+    res.sendFile(path.resolve('dist/index.html'));
+  });
   const port: number = Number(process.env.PORT) || 3000;
   httpServer.listen(port, "0.0.0.0", () => {
     console.log(`🚀 Server running on port ${port}`);
